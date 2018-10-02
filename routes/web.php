@@ -11,8 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'DemandaController@index');
+Route::get('/cadastrar','DemandaController@cadastrar');
+Route::post('/add','DemandaController@add');
 
-
+//Route::group(['prefix' => 'demanda'], function(){
+//    Route::get('/','DemandaController@index');
+//    Route::get('/cadastrar','DemandaController@cadastrar');
+//});

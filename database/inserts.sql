@@ -1,0 +1,32 @@
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0003,'Sistema de Gestão de Convocações','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0004,'Software de Gestão de Riscos e Segurança do Paciente','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0006,'Sistema de Almoxarifado do Administrativo','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0011,'Sistema de Descentralização de Crédito','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0014,'Sistema de Pesquisa de Satisfação','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0015,'Sistema de Gestão de Contratos do SUS','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0018,'Sistema de Gestão de Patrimônio','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0024,'Sistema de Ensino e Pesquisa dos Hospitais Universitários Federais','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0028,'Sistema de Gestão de Progressão','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0038,'Monitoramento de Obras','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0040,'Ouvidoria','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0041,'Auditoria','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0046,'Mutirão','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0047,'Contratos','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0048,'Sistema de Gerenciamento de Projetos','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0049,'Sistema de Protocolo','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0050,'Sistema de Estágio de Residência da Rede Ebserh','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0051,'Painel Modelo de Gestão DAS','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0052,'Projeto Rede Pesquisa','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0053,'Processo Seletivo','');
+INSERT INTO sisdm.sistema(siscodigo,sisnome, sisdescricao) VALUES(0054,'Corregedoria','');
+
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Apoio ao usuário?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Análise no código?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Correção no código?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Criação de script BD?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Alteração de BD? Quantas tabelas, arquivos ou excel?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Script para atualização de dados? Quantas atualizações de dados (um registro de uma única tabela)?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Criado/efetuado alguma consulta (SELECT)? Quantos atributos?');
+INSERT INTO sisdm.atendimento(atedescricao) VALUES ('Outros?');
+
+ALTER TABLE demanda CHANGE datafinalização demdatafinalização datetime NOT NULL;
