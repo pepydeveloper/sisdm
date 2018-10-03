@@ -15,7 +15,7 @@ class Sistema extends Model
 
     protected $table = 'sistema';
 
-    public function demandas(){
-        return $this->hasMany(Demanda::class, 'sisid');
+    public function demanda(){
+        return $this->belongsTo(Demanda::class, 'sisid');
     }
 }

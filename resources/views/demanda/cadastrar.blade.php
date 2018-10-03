@@ -92,7 +92,6 @@
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
             <input type="text" name="demdatafinalizacao" class="form-control" placeholder="##/##/####"
                    aria-describedby="basic-addon1">
-            <input type="text" class="form-control cpf-mask" placeholder="Ex.: 000.000.000-00">
         </div>
         <br>
 
@@ -145,7 +144,6 @@
             <div id="divFuncionalidades">
 
             </div>
-
         </div>
         <br>
         <div class="input-group">
@@ -204,10 +202,10 @@
             func += '</div>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Funcionalidade</span>';
-            func += '<input type="text" class="form-control" name="funcionalidade['+idfunc+'][funcnome]"';
+            func += '<input type="text" class="form-control" name="funcionalidade['+idfunc+'][funnome]"';
             func += 'placeholder="Demanda" size="60">';
             func += '<span class="input-group-addon">Tipo de Mudança</span>';
-            func += '<select class="form-control" name="funcionalidade['+idfunc+'][demtipo]">';
+            func += '<select class="form-control" name="funcionalidade['+idfunc+'][deftipomudanca]">';
             func += '<option value="E">Evolutiva</option>';
             func += '<option value="N">Nova Funcionalidade</option>';
             func += '<option value="S">Sustentação</option>';
@@ -216,50 +214,28 @@
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Descrição da Manutenção</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][funcdescricao]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][defdescricao]"></textarea>';
             func += '</div>';
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Alteração em Arquivos ou Tabelas?</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][funcdescalteracao]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][defalteracaoarquivos]"></textarea>';
             func += '</div>';
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Carga de Dados</span>';
-            func += '<textarea class="form-control" aria-label="With textarea name="funcionalidade['+idfunc+'][funcdesccargadados]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea name="funcionalidade['+idfunc+'][defcargadados]"></textarea>';
             func += '</div>';
             func += '<br>';
-            func += '<button onclick="AddTableRow()" type="button">Adicionar Tabelas a funcionalidade</button>';
-            func += '<input type="hidden" value="0" name="funcionalidade['+idfunc+'][qtdtabelas]">';
-            func += '<table id="tabela_funcionalidades" class="table table-striped">';
+            func += '<button onclick="AddTableRow('+idfunc+')" type="button">Adicionar Tabelas a funcionalidade</button>';
+            func += '<input type="hidden" value="0" id="qtdtabelas_'+idfunc+'">';
+            func += '<table id="tabela_funcionalidades_'+idfunc+'" class="table table-striped">';
             func += '<tbody>';
             func += '<tr>';
             func += '<th width="10%"></th>';
             func += '<th width="50%">Tabela</th>';
             func += '<th width="20%">Já era Utilizada</th>';
             func += '<th width="20%">Tipo de Acesso</th>';
-            func += '</tr>';
-            func += '<tr>';
-            func += '<td>';
-            func += '<center>';
-            func += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside"';
-            func += 'class="btn btn-danger btn-sm">X';
-            func += '</button>';
-            func += '</center>';
-            func += '</td>';
-            func += '<td><input type="text" class="form-control" name="funcionalidade['+idfunc+'][tabelas][][tabnome]"';
-            func += 'placeholder="Demanda" size="60"></td>';
-            func += '<td>';
-            func += '<input type="radio" name="funcionalidade['+idfunc+'][tabelas][][tabutilizacao]" value="S">Sim';
-            func += '&nbsp;&nbsp;';
-            func += '<input type="radio" name="funcionalidade['+idfunc+'][tabelas][][tabutilizacao]" value="N" checked>Não';
-            func += '</td>';
-            func += '<td><select class="form-control" name="funcionalidade['+idfunc+'][tabelas][][tabtipoacesso]">';
-            func += '<option value="E">Escrita</option>';
-            func += '<option value="L">Leitura</option>';
-            func += '<option value="EL">Escrita e Leitura</option>';
-            func += '</select>';
-            func += '</td>';
             func += '</tr>';
             func += '</tbody>';
             func += '</table>';
@@ -282,24 +258,27 @@
 
     //Adiciona e remove linhas
     (function ($) {
-        AddTableRow = function () {
-            var qtd = $('#qtd_funcionalidade').val();
-
+        AddTableRow = function (idfunc) {
+            var nrTabela = $('#qtdtabelas_'+idfunc).val();
+            alert(nrTabela);
             var newRow = $("<tr>");
             var cols = "";
             cols += '<td><center>';
             cols += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
             cols += '</center></td>';
-            cols += '<td><input type="text" class="form-control" name="funcionalidade['+qtd+'][tabnome]"\n' +
+            cols += '<td><input type="text" class="form-control" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tabnome]"\n' +
                 '    placeholder="Nome da Tabela (schema.nometabela)" size="60"></td>';
-            cols += '<td><input type="radio" name="funcionalidade['+qtd+'][tafutilizacao]" value="S" >Sim &nbsp;&nbsp; <input type="radio" name="funcionalidade['+qtd+'][tafutilizacao]" value="N" checked>Não</td>';
-            cols += '<td><select class="form-control" name="funcionalidade['+qtd+'][tabpermissao]">\n' +
+            cols += '<td><input type="radio" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
+                '<input type="radio" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tafutilizada]" value="N" checked>Não</td>';
+            cols += '<td><select class="form-control" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][taftipoacesso]">\n' +
                 '        <option value="E">Escrita</option>\n' +
                 '        <option value="L">Leitura</option>\n' +
                 '        <option value="EL">Escrita e Leitura</option>\n' +
                 '    </select></td>';
             newRow.append(cols);
-            $("#tabela_funcionalidades_" + qtd).append(newRow);
+            $("#tabela_funcionalidades_" + idfunc).append(newRow);
+            nrTabela++;
+            $('#qtdtabelas_'+idfunc).val(nrTabela);
             return false;
         };
     })(jQuery);

@@ -18,7 +18,7 @@ class CriaTabelaDemanda extends Migration
             $table->integer('demnumero');
             $table->string('demdescricao');
             $table->string('demtipo');
-            $table->dateTime('datafinalização');
+            $table->dateTime('datafinalizacao');
             $table->integer('sisid')->unsigned();
             $table->foreign('sisid')->references('sisid')->on('sistema');
             $table->timestamps();

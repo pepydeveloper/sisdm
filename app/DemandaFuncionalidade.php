@@ -8,6 +8,10 @@ class DemandaFuncionalidade extends Model
 {
     protected $fillable = [
         'defid',
+        'deftipomudanca',
+        'defdescricao',
+        'defalteracaoarquivos',
+        'defcargadados',
         'demid',
         'funid'
     ];

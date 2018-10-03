@@ -8,9 +8,10 @@ class FuncionalideTabelas extends Model
 {
     protected $fillable = [
         'tafid',
+        'tafutilizada',
+        'taftipoacesso',
         'funid',
         'tabid',
-        'tafpermissao'
     ];
 
     protected $table = 'funcionalidade_tabelas';

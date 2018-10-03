@@ -17,7 +17,6 @@ class CriaTabelaSistema extends Migration
             $table->increments('sisid');
             $table->string('sisnome');
             $table->integer('siscodigo');
-            $table->string('sisdescricao');
             $table->timestamps();
         });
     }

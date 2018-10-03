@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CriaTabelaDemandaFuncionalide extends Migration
+class CriaTabelaDemandaFuncionalidede extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CriaTabelaDemandaFuncionalide extends Migration
      */
     public function up()
     {
-        Schema::create('demanda_funcionalide', function (Blueprint $table) {
+        Schema::create('demanda_funcionalidade', function (Blueprint $table) {
             $table->increments('defid');
+            $table->char('deftipomudanca',1);
+            $table->string('defdescricao',5000);
+            $table->string('defalteracaoarquivos',5000);
+            $table->string('defcargadados',5000);
             $table->integer('demid')->unsigned();
             $table->integer('funid')->unsigned();
             $table->foreign('demid')->references('demid')->on('demanda');
@@ -30,6 +34,6 @@ class CriaTabelaDemandaFuncionalide extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('demanda_funcionalide');
+        Schema::dropIfExists('demanda_funcionalidade');
     }
 }

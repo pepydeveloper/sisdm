@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Atendimento;
 use App\Demanda;
-use App\DemandaAtendimento;
+use App\Funcionalidade;
 use App\Sistema;
+use App\DemandaAtendimento;
+use App\DemandaFuncionalidade;
+use App\FuncionalideTabelas;
+use App\Tabelas;
 
 class DemandaController extends Controller
 {
@@ -37,9 +41,28 @@ class DemandaController extends Controller
                 $dat['datdescricao'] = $atendimento['descricao'];
                 $dat['datquantidade'] = $atendimento['quantidade'];
                 $dat['ateid'] = $ateid;
-                $dat['demid'] = $demid;
+                $dat['demid'] = $demid->id;
 
                 DemandaAtendimento::create($dat);
+            }
+        }
+
+        foreach($_REQUEST['funcionalidade'] as $funcionalidade){
+
+            $funcionalidade['sisid'] = $_REQUEST['sisid'];
+            $funcionalidade['demid'] = $demid->id;
+            $funid = Funcionalidade::create($funcionalidade);
+            $funcionalidade['funid'] = $funid->id;
+
+            DemandaFuncionalidade::create($funcionalidade);
+
+            foreach($funcionalidade['tabela'] as $tabela){
+                $tabid = Tabelas::create($tabela);
+                $tabela['tabid'] = $tabid->id;
+                $tabela['funid'] = $funcionalidade['funid'];
+
+                FuncionalideTabelas::create($tabela);
+
             }
         }
 

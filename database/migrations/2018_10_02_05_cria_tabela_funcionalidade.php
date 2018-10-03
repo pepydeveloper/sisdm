@@ -16,7 +16,6 @@ class CriaTabelaFuncionalidade extends Migration
         Schema::create('funcionalidade', function (Blueprint $table) {
             $table->increments('funid');
             $table->string('funnome');
-            $table->string('fundescricao');
             $table->integer('sisid')->unsigned();
             $table->foreign('sisid')->references('sisid')->on('sistema');
             $table->timestamps();
