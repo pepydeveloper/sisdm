@@ -10,7 +10,6 @@ class Sistema extends Model
         'sisid',
         'sisnome',
         'siscodigo',
-        'sisdescricao'
     ];
 
     protected $table = 'sistema';

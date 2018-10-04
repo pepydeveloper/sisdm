@@ -133,23 +133,57 @@
             </table>
         </div>
         <div class="panel panel-danger" id="funcionaldades">
-            <!-- Default panel contents -->
             <div class="panel-heading">
                 <center><b>Correções de Código / Tabelas</b></center>
             </div>
             <br>
-            <button type="button" onclick="AddFuncionalidade()" type="button">Nova Funcionalidade</button>
+            <button type="button" onclick="AddFuncionalidade()" type="button" class="btn btn-success">Nova
+                Funcionalidade
+            </button>
+            <button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">
+                Cadastrat Nova Tabela
+            </button>
             <input type="hidden" name="idfunc" value="0" id="idfunc">
             <br><br>
-            <div id="divFuncionalidades">
-
-            </div>
+            <div id="divFuncionalidades"></div>
         </div>
         <br>
         <div class="input-group">
-            <button type="button" style="margin-top: 5px; float: outside" class="btn btn-danger" onclick="window.location.href='/'">Voltar
+            <button type="button" style="margin-top: 5px; float: outside" class="btn btn-danger"
+                    onclick="window.location.href='/'">Voltar
             </button>
             <button style="margin-top: 5px; float: right" class="btn btn-primary">Salvar</button>
+        </div>
+        <div class="modal fade" id="modalCadastroTabela" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            <center>Cadastro de Tabelas</center>
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Owner:</label>
+                                <input type="text" class="form-control" id="tabowner" name="tabowner">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Tabela:</label>
+                                <input type="text" class="form-control" id="tabnome" name="tabnome">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
+                        <button type="button" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -194,18 +228,18 @@
             var idfunc = $('#idfunc').val();
 
             var func = "";
-            func += '<div class="panel panel-success" id="funcionaldades_'+idfunc+'">';
+            func += '<div class="panel panel-success" id="funcionaldades_' + idfunc + '">';
             func += '<div class="panel-heading">';
             func += '<button type="button"  style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm"';
-            func += 'onclick="RemoveFuncionalidade('+idfunc+')">X';
-            func += '</button> &nbsp;<span class="badge badge-pill badge-primary">Funcionalidade '+idfunc+'</span>';
+            func += 'onclick="RemoveFuncionalidade(' + idfunc + ')">X';
+            func += '</button> &nbsp;<span class="badge badge-pill badge-primary">Funcionalidade ' + idfunc + '</span>';
             func += '</div>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Funcionalidade</span>';
-            func += '<input type="text" class="form-control" name="funcionalidade['+idfunc+'][funnome]"';
+            func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
             func += 'placeholder="Demanda" size="60">';
             func += '<span class="input-group-addon">Tipo de Mudança</span>';
-            func += '<select class="form-control" name="funcionalidade['+idfunc+'][deftipomudanca]">';
+            func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
             func += '<option value="E">Evolutiva</option>';
             func += '<option value="N">Nova Funcionalidade</option>';
             func += '<option value="S">Sustentação</option>';
@@ -214,28 +248,29 @@
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Descrição da Manutenção</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][defdescricao]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
             func += '</div>';
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Alteração em Arquivos ou Tabelas?</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade['+idfunc+'][defalteracaoarquivos]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defalteracaoarquivos]"></textarea>';
             func += '</div>';
             func += '<br>';
             func += '<div class="input-group">';
             func += '<span class="input-group-addon">Carga de Dados</span>';
-            func += '<textarea class="form-control" aria-label="With textarea name="funcionalidade['+idfunc+'][defcargadados]"></textarea>';
+            func += '<textarea class="form-control" aria-label="With textarea name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
             func += '</div>';
             func += '<br>';
-            func += '<button onclick="AddTableRow('+idfunc+')" type="button">Adicionar Tabelas a funcionalidade</button>';
-            func += '<input type="hidden" value="0" id="qtdtabelas_'+idfunc+'">';
-            func += '<table id="tabela_funcionalidades_'+idfunc+'" class="table table-striped">';
+            func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
+            func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
+            func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
             func += '<tbody>';
             func += '<tr>';
             func += '<th width="10%"></th>';
+            func += '<th width="20%">Owner</th>';
             func += '<th width="50%">Tabela</th>';
-            func += '<th width="20%">Já era Utilizada</th>';
-            func += '<th width="20%">Tipo de Acesso</th>';
+            func += '<th width="10%">Já era Utilizada</th>';
+            func += '<th width="10%">Tipo de Acesso</th>';
             func += '</tr>';
             func += '</tbody>';
             func += '</table>';
@@ -250,7 +285,7 @@
 
     (function ($) {
         RemoveFuncionalidade = function (idfunc) {
-            $("div").remove( "#funcionaldades_"+idfunc );
+            $("div").remove("#funcionaldades_" + idfunc);
             return false;
         }
     })(jQuery);
@@ -259,18 +294,22 @@
     //Adiciona e remove linhas
     (function ($) {
         AddTableRow = function (idfunc) {
-            var nrTabela = $('#qtdtabelas_'+idfunc).val();
-            alert(nrTabela);
+            var nrTabela = $('#qtdtabelas_' + idfunc).val();
             var newRow = $("<tr>");
             var cols = "";
             cols += '<td><center>';
             cols += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
             cols += '</center></td>';
-            cols += '<td><input type="text" class="form-control" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tabnome]"\n' +
+            cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
+            cols += '<option value="E">Evolutiva</option>';
+            cols += '<option value="N">Nova Funcionalidade</option>';
+            cols += '<option value="S">Sustentação</option>';
+            cols += '</select></td>';
+            cols += '<td><input type="text" class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabnome]"\n' +
                 '    placeholder="Nome da Tabela (schema.nometabela)" size="60"></td>';
-            cols += '<td><input type="radio" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
-                '<input type="radio" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][tafutilizada]" value="N" checked>Não</td>';
-            cols += '<td><select class="form-control" name="funcionalidade['+idfunc+'][tabela]['+nrTabela+'][taftipoacesso]">\n' +
+            cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
+                '<input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="N" checked>Não</td>';
+            cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]">\n' +
                 '        <option value="E">Escrita</option>\n' +
                 '        <option value="L">Leitura</option>\n' +
                 '        <option value="EL">Escrita e Leitura</option>\n' +
@@ -278,7 +317,7 @@
             newRow.append(cols);
             $("#tabela_funcionalidades_" + idfunc).append(newRow);
             nrTabela++;
-            $('#qtdtabelas_'+idfunc).val(nrTabela);
+            $('#qtdtabelas_' + idfunc).val(nrTabela);
             return false;
         };
     })(jQuery);
