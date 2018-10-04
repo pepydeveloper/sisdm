@@ -8,8 +8,8 @@ class Tabelas extends Model
 {
     protected $fillable = [
         'tabid',
-        'tabnome',
-        'tabschema'
+        'tabowner',
+        'tabnome'
     ];
 
     protected $table = 'tabelas';

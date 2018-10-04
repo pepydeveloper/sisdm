@@ -4,8 +4,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
     <meta charset="utf-8"/>
-
 </head>
 <style>
     html, body {
@@ -66,8 +66,8 @@
         {{ csrf_field() }}
         <div class="input-group">
             <span class="input-group-addon">Demanda</span>
-            <input type="text" class="form-control" name="demnumero"
-                   placeholder="Demanda" size="60">
+            <input type="text" class="form-control" name="demnumero" id="demnumero"
+                   placeholder="Demanda" size="60" onblur="verificademanda()">
             <span class="input-group-addon" id="basic-addon1">Sistema</span>
             <select class="form-control" name="sisid">
                 @foreach($sistemas as $sistema)
@@ -90,7 +90,7 @@
                 <option value="S">Sustentação</option>
             </select>
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
-            <input type="text" name="demdatafinalizacao" class="form-control" placeholder="##/##/####"
+            <input type="text" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control" placeholder="##/##/####"
                    aria-describedby="basic-addon1">
         </div>
         <br>
@@ -170,7 +170,11 @@
                         <form>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Owner:</label>
-                                <input type="text" class="form-control" id="tabowner" name="tabowner">
+                                <select class="form-control" id="tabowner" name="tabowner">
+                                @foreach($owners as $owner)
+                                    <option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>
+                                @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Tabela:</label>
@@ -180,7 +184,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
-                        <button type="button" class="btn btn-primary">Cadastrar</button>
+                        <button type="button" class="btn btn-primary" onclick="cadastrarTabela()">Cadastrar</button>
                     </div>
                 </div>
             </div>
@@ -189,7 +193,8 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
+<script src="http://demo.expertphp.in/js/jquery.js"></script>
+<script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
@@ -198,101 +203,73 @@
 
 <script>
     $(document).ready(function () {
-        $('#funcionaldades').hide();
     });
-
-    function liberaCampos(liberar, id) {
-        if (liberar == 's') {
-            $('#descricao_' + id).prop('disabled', false);
-            $('#quantidade_' + id).prop('disabled', false);
-
-            if (id == 3) {
-                $('#funcionaldades').show();
-            }
-
-        } else {
-            $('#descricao_' + id).val('');
-            $('#descricao_' + id).prop('disabled', true);
-            $('#quantidade_' + id).val('');
-            $('#quantidade_' + id).prop('disabled', true);
-
-            if (id == 3) {
-                $('#funcionaldades').hide();
-            }
-        }
-    }
-
-    //Adiciona e remove funcionalidades inteiras
-    (function ($) {
-        AddFuncionalidade = function () {
-            var idfunc = $('#idfunc').val();
-
-            var func = "";
-            func += '<div class="panel panel-success" id="funcionaldades_' + idfunc + '">';
-            func += '<div class="panel-heading">';
-            func += '<button type="button"  style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm"';
-            func += 'onclick="RemoveFuncionalidade(' + idfunc + ')">X';
-            func += '</button> &nbsp;<span class="badge badge-pill badge-primary">Funcionalidade ' + idfunc + '</span>';
-            func += '</div>';
-            func += '<div class="input-group">';
-            func += '<span class="input-group-addon">Funcionalidade</span>';
-            func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
-            func += 'placeholder="Demanda" size="60">';
-            func += '<span class="input-group-addon">Tipo de Mudança</span>';
-            func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
-            func += '<option value="E">Evolutiva</option>';
-            func += '<option value="N">Nova Funcionalidade</option>';
-            func += '<option value="S">Sustentação</option>';
-            func += '</select>';
-            func += '</div>';
-            func += '<br>';
-            func += '<div class="input-group">';
-            func += '<span class="input-group-addon">Descrição da Manutenção</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
-            func += '</div>';
-            func += '<br>';
-            func += '<div class="input-group">';
-            func += '<span class="input-group-addon">Alteração em Arquivos ou Tabelas?</span>';
-            func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defalteracaoarquivos]"></textarea>';
-            func += '</div>';
-            func += '<br>';
-            func += '<div class="input-group">';
-            func += '<span class="input-group-addon">Carga de Dados</span>';
-            func += '<textarea class="form-control" aria-label="With textarea name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
-            func += '</div>';
-            func += '<br>';
-            func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
-            func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
-            func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
-            func += '<tbody>';
-            func += '<tr>';
-            func += '<th width="10%"></th>';
-            func += '<th width="20%">Owner</th>';
-            func += '<th width="50%">Tabela</th>';
-            func += '<th width="10%">Já era Utilizada</th>';
-            func += '<th width="10%">Tipo de Acesso</th>';
-            func += '</tr>';
-            func += '</tbody>';
-            func += '</table>';
-            func += '</div>';
-
-            $("#divFuncionalidades").prepend(func);
-
-            idfunc++;
-            $('#idfunc').val(idfunc);
-        };
-    })(jQuery);
-
-    (function ($) {
-        RemoveFuncionalidade = function (idfunc) {
-            $("div").remove("#funcionaldades_" + idfunc);
-            return false;
-        }
-    })(jQuery);
-
 
     //Adiciona e remove linhas
     (function ($) {
+        AddFuncionalidade = function () {
+            if($('#sisid').val() == 0){
+                $('#sisid').focus();
+                alert('Selecione um sistema');
+            }else {
+                var idfunc = $('#idfunc').val();
+
+                var func = "";
+                func += '<div class="panel panel-success" id="funcionaldades_' + idfunc + '">';
+                func += '<div class="panel-heading">';
+                func += '<button type="button"  style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm"';
+                func += 'onclick="RemoveFuncionalidade(' + idfunc + ')">X';
+                func += '</button> &nbsp;<span class="badge badge-pill badge-primary">Funcionalidade ' + idfunc + '</span>';
+                func += '</div>';
+                func += '<div class="input-group">';
+                func += '<span class="input-group-addon">Funcionalidade</span>';
+                func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
+                func += 'placeholder="Demanda" id="funnome" size="60" onchange="autoComplete(this)">';
+                func += '<span class="input-group-addon">Tipo de Mudança</span>';
+                func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
+                func += '<option value="E">Evolutiva</option>';
+                func += '<option value="N">Nova Funcionalidade</option>';
+                func += '<option value="S">Sustentação</option>';
+                func += '</select>';
+                func += '</div>';
+                func += '<br>';
+                func += '<div class="input-group">';
+                func += '<span class="input-group-addon">Descrição da Manutenção</span>';
+                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
+                func += '</div>';
+                func += '<br>';
+                func += '<div class="input-group">';
+                func += '<span class="input-group-addon">Alteração em Arquivos ou Tabelas?</span>';
+                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defalteracaoarquivos]"></textarea>';
+                func += '</div>';
+                func += '<br>';
+                func += '<div class="input-group">';
+                func += '<span class="input-group-addon">Carga de Dados</span>';
+                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
+                func += '</div>';
+                func += '<br>';
+                func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
+                func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
+                func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
+                func += '<tbody>';
+                func += '<tr>';
+                func += '<th width="10%"></th>';
+                func += '<th width="20%">Owner</th>';
+                func += '<th width="50%">Tabela</th>';
+                func += '<th width="10%">Já era Utilizada</th>';
+                func += '<th width="10%">Tipo de Acesso</th>';
+                func += '</tr>';
+                func += '</tbody>';
+                func += '</table>';
+                func += '</div>';
+
+                $("#divFuncionalidades").prepend(func);
+
+                idfunc++;
+                $('#idfunc').val(idfunc);
+            }
+        };
+
         AddTableRow = function (idfunc) {
             var nrTabela = $('#qtdtabelas_' + idfunc).val();
             var newRow = $("<tr>");
@@ -300,13 +277,17 @@
             cols += '<td><center>';
             cols += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
             cols += '</center></td>';
-            cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
-            cols += '<option value="E">Evolutiva</option>';
-            cols += '<option value="N">Nova Funcionalidade</option>';
-            cols += '<option value="S">Sustentação</option>';
+            cols += '<td><select class="form-control" id="tabowner_'+idfunc+'_'+nrTabela+'" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabwoner]" ';
+            cols += 'onchange="buscaTabelas('+idfunc+','+nrTabela+')">';
+            cols += '<option value="0">Selecione o Owner.. </option>';
+            @foreach($owners as $owner)
+            cols += '<option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>';
+            @endforeach
             cols += '</select></td>';
-            cols += '<td><input type="text" class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabnome]"\n' +
-                '    placeholder="Nome da Tabela (schema.nometabela)" size="60"></td>';
+            cols += '<td><select class="form-control" id="tabnome_'+idfunc+'_'+nrTabela+'" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" ';
+            cols += 'onfocus="buscaTabelas('+idfunc+','+nrTabela+')">';
+            cols += '<option value="0">Selecione a tabela.. </option>';
+            cols += '</select></td>';
             cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
                 '<input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="N" checked>Não</td>';
             cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]">\n' +
@@ -320,9 +301,12 @@
             $('#qtdtabelas_' + idfunc).val(nrTabela);
             return false;
         };
-    })(jQuery);
 
-    (function ($) {
+        RemoveFuncionalidade = function (idfunc) {
+            $("div").remove("#funcionaldades_" + idfunc);
+            return false;
+        }
+
         RemoveRow = function (item) {
             var tr = $(item).closest('tr');
             tr.fadeOut(400, function () {
@@ -330,6 +314,104 @@
             });
             return false;
         }
+
+        liberaCampos = function (liberar, id) {
+            if (liberar == 's') {
+                $('#descricao_' + id).prop('disabled', false);
+                $('#quantidade_' + id).prop('disabled', false);
+            } else {
+                $('#descricao_' + id).val('');
+                $('#descricao_' + id).prop('disabled', true);
+                $('#quantidade_' + id).val('');
+                $('#quantidade_' + id).prop('disabled', true);
+            }
+        }
+
+        cadastrarTabela = function (){
+            src = "{{ route('addtabela') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    tabowner : $('#tabowner').val(), tabnome: $('#tabnome').val()
+                },
+                success: function(data) {
+                    if(data){
+                        $('#modalCadastroTabela').modal('hide')
+                    }else{
+                        alert('ocorreu um erro ao cadastrar tabela.')
+                    }
+                }
+            });
+        }
+
+        buscaTabelas = function(funcionalidade,tabela){
+            var owner = $('#tabowner_'+funcionalidade+'_'+tabela+' :selected').text();
+            src = "{{ route('atualizaTabelas') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    tabowner : owner
+                },
+                success: function(dados) {
+                    if (dados.length > 0){
+                        var option = '<option>Selecione a Tabela.. </option>';
+                        $.each(dados, function(i, obj){
+                            option += '<option value="'+obj.tabid+'">'+obj.tabnome+'</option>';
+                        })
+                    }else{
+                        Reset();
+                    }
+                    $('#tabnome_'+funcionalidade+'_'+tabela+'').html(option).show();
+                }
+            });
+        }
+
+        verificademanda = function(){
+            // alert($('#demnumero').val());
+            src = "{{ route('verificademanda') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    demnumero : $('#demnumero').val()
+                },
+                success: function(data) {
+                    if(data){
+                        $('#demnumero').val('');
+                        $('#demnumero').focus();
+                        alert('Demanda já existente.')
+                    }
+                }
+            });
+        }
+
+        autoComplete = function(){
+            src = "{{ route('autoComplete') }}";
+            $("#funnome").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: src,
+                        dataType: "json",
+                        data: {
+                            term : request.term
+                        },
+                        success: function(data) {
+                            response(data);
+
+                        }
+                    });
+                },
+                minLength: 3,
+            });
+        }
+
+
+
     })(jQuery);
 
 </script>

@@ -18,6 +18,6 @@ class Demanda extends Model
     protected $table = 'demanda';
 
     public function sistema(){
-        return $this->belongsTo(Sistema::class, 'sisid');
+        return $this->hasOne('App\Sistema','sisid','sisid');
     }
 }

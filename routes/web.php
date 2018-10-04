@@ -14,8 +14,8 @@
 Route::get('/', 'DemandaController@index');
 Route::get('/cadastrar','DemandaController@cadastrar');
 Route::post('/add','DemandaController@add');
-
-//Route::group(['prefix' => 'demanda'], function(){
-//    Route::get('/','DemandaController@index');
-//    Route::get('/cadastrar','DemandaController@cadastrar');
-//});
+Route::get('/addtabela',array('as'=>'addtabela','uses'=>'AjaxController@addtabela'));
+Route::get('/searchajax',array('as'=>'searchajax','uses'=>'AjaxController@autoComplete'));
+Route::get('/atualizaTabelas',array('as'=>'atualizaTabelas','uses'=>'AjaxController@atualizaTabelas'));
+Route::get('/verificademanda',array('as'=>'verificademanda','uses'=>'AjaxController@verificademanda'));
+Route::get('/autoComplete',array('as'=>'autoComplete','uses'=>'AjaxController@autoComplete'));

@@ -21,15 +21,18 @@ class DemandaController extends Controller
     public function cadastrar(){
         $atendimentos = Atendimento::all();
         $sistemas = Sistema::all();
+        $tabelas = Tabelas::all();
+        $owners = Tabelas::all('tabowner')->sortBy("tabowner")->groupBy('tabowner');
 
         return view('demanda.cadastrar',[
             'atendimentos' => $atendimentos,
             'sistemas' => $sistemas,
+            'tabelas' => $tabelas,
+            'owners' => $owners,
         ]);
     }
 
     public function add(){
-
         //Salva a demanda
         $data = explode('/',$_REQUEST['demdatafinalizacao']);
         $_REQUEST['demdatafinalizacao'] = $data[2].'-'.$data[1].'-'.$data[0];
@@ -53,21 +56,15 @@ class DemandaController extends Controller
             $funcionalidade['demid'] = $demid->id;
             $funid = Funcionalidade::create($funcionalidade);
             $funcionalidade['funid'] = $funid->id;
-
             DemandaFuncionalidade::create($funcionalidade);
 
             foreach($funcionalidade['tabela'] as $tabela){
-                $tabid = Tabelas::create($tabela);
-                $tabela['tabid'] = $tabid->id;
+                $tabela['tabid'] = $tabela['tabid'];
                 $tabela['funid'] = $funcionalidade['funid'];
-
                 FuncionalideTabelas::create($tabela);
-
             }
         }
-
         return redirect('/');
-
     }
 
 }

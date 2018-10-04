@@ -77,38 +77,52 @@
 
 </div>
 <div>
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading links"><a href="cadastrar"><span class="glyphicon glyphicon-paste" aria-hidden="true"> Nova Demanda</a></div>
-        <!-- Table -->
-        <table class="table">
-            <tr>
-                <th>Ação</th>
-                <th>Demanda</th>
-                <th>Descrição</th>
-                <th>Sistema</th>
-                <th>Tipo</th>
-            </tr>
-
-        @foreach($demandas as $demanda)
-            <tr>
-                <td>
-                    <span class="glyphicon glyphicon-download-alt"></span>
-                    <span class="glyphicon glyphicon-remove-sign"></span>
-                    <span class="glyphicon glyphicon-eye-open"></span>
-                </td>
-                <td>{{$demanda->demnumero}}</td>
-                <td>{{$demanda->demdescricao}}</td>
-                <td>{{$demanda->sisid}}</td>
-                <td>{{$demanda->demtipo}}</td>
-            </tr>
-        @endforeach
+    <div class="panel panel-success">
+        <div class="panel-heading links"><a href="cadastrar"><span class="btn btn-primary glyphicon glyphicon-paste"
+                                                                   aria-hidden="true"> Nova Demanda</a></div>
+        <table class="table  table-striped">
+            <thead>
+                <tr>
+                    <th>Ação</th>
+                    <th>Demanda</th>
+                    <th>Descrição</th>
+                    <th>Sistema</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($demandas as $demanda)
+                <tr>
+                    <td>
+                        <span class="btn btn-success glyphicon glyphicon-download-alt"></span>
+                        <span class="btn btn-danger glyphicon glyphicon-remove-sign"></span>
+                        <span class="btn btn-warning glyphicon glyphicon-eye-open"></span>
+                    </td>
+                    <td>{{$demanda->demnumero}}</td>
+                    <td>{{$demanda->demdescricao}}</td>
+                    <td>{{$demanda->sistema->sisnome}}</td>
+                    <td>
+                        @if($demanda->demtipo == 'E')
+                            Evolutiva
+                        @elseif($demanda->demtipo == 'N')
+                            Nova Funcionalidade
+                        @else
+                            Sustentacao
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+            <tfoot class="table-active">
+                <tr>
+                    <td colspan="5"> Quantidade: {{count($demandas)}}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>

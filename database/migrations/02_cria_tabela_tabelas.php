@@ -15,8 +15,8 @@ class CriaTabelaTabelas extends Migration
     {
         Schema::create('tabelas', function (Blueprint $table) {
             $table->increments('tabid');
-            $table->string('tabnome');
             $table->string('tabowner');
+            $table->string('tabnome');
             $table->timestamps();
         });
     }
