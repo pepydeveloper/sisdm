@@ -5,6 +5,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <meta charset="utf-8">
 </head>
 <style>
@@ -52,6 +53,7 @@
     .m-b-md {
         margin-bottom: 30px;
     }
+    .ui-autocomplete { position: absolute; cursor: default;z-index:1600 !important;}
 </style>
 <body>
 <div class="flex-center position-ref">
@@ -155,7 +157,7 @@
             </button>
             <button style="margin-top: 5px; float: right" class="btn btn-primary">Salvar</button>
         </div>
-        <div class="modal fade" id="modalCadastroTabela" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade pac-container" id="modalCadastroTabela" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -171,15 +173,11 @@
                         <form>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Owner:</label>
-                                <select class="form-control" id="tabowner" name="tabowner">
-                                    @foreach($owners as $owner)
-                                        <option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="tabowner" name="tabowner" id="tabowner" onkeyup="autoCompleteOwner();">
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Tabela:</label>
-                                <input type="text" class="form-control" id="tabnome" name="tabnome">
+                                <input type="text" class="form-control" id="tabnome" name="tabnome" id="tabnome" onkeyup="autoCompleteTabela();">
                             </div>
                         </form>
                     </div>
@@ -199,33 +197,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
-
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </body>
 </html>
 
 <script>
-    $(function() {
-        var esportes = [
-            "Natação",
-            "Futebol",
-            "Vôlei",
-            "Basquete"
-        ];
-        $("#funnome" ).autocomplete({
-            source: esportes
-        });
-    });
-    $(document).ready(function () {
-    });
-
-    //Adiciona e remove linhas
     (function ($) {
-
-        autoComplete = function(funcionalidade) {
-            src = "{{ route('autocomplete') }}";
+        autoCompleteFuncionalidade = function(funcionalidade) {
+            src = "{{ route('autocompletefuncionalidade') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
@@ -234,16 +214,49 @@
                     funnome:  $("#funnome_"+funcionalidade).val()
                 },
                 success: function (data) {
-                    // if (data) {
-                    //     $('#modalCadastroTabela').modal('hide')
-                    // } else {
-                    //     alert('ocorreu um erro ao cadastrar tabela.')
-                    // }
                     $("#funnome_"+funcionalidade).autocomplete({
                         source: data
                     });
                 }
             });
+        };
+
+        autoCompleteOwner = function() {
+            if($('#tabowner').val().length > 3){
+                src = "{{ route('autocompleteowner') }}";
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        tabowner:  $('#tabowner').val()
+                    },
+                    success: function (data) {
+                        $("#tabowner").autocomplete({
+                            source: data
+                        });
+                    }
+                });
+            }
+        };
+
+        autoCompleteTabela = function() {
+            if($('#tabnome').val().length > 3){
+                src = "{{ route('autocompletetabela') }}";
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        tabnome:  $('#tabnome').val()
+                    },
+                    success: function (data) {
+                        $("#tabnome").autocomplete({
+                            source: data
+                        });
+                    }
+                });
+            }
         };
 
         AddFuncionalidade = function () {
@@ -263,7 +276,7 @@
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Funcionalidade</span>';
                 func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
-                func += 'placeholder="Demanda" id="funnome_'+idfunc+'" size="60" onkeyup="autoComplete('+idfunc+');">';
+                func += 'placeholder="Demanda" id="funnome_'+idfunc+'" size="60" onkeyup="autoCompleteFuncionalidade('+idfunc+');">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
                 func += '<option value="E">Evolutiva</option>';
