@@ -94,7 +94,7 @@
             @foreach($demandas as $demanda)
                 <tr>
                     <td>
-                        <span class="btn btn-success glyphicon glyphicon-download-alt"></span>
+                        <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demid}});" target="_blank"></a>
                         <span class="btn btn-danger glyphicon glyphicon-remove-sign"></span>
                         <span class="btn btn-warning glyphicon glyphicon-eye-open"></span>
                     </td>
@@ -128,3 +128,10 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+<script>
+    (function ($) {
+        exportarXls = function(demid) {
+            window.open('/exportar?demid='+demid, '_blank');
+        };
+    })(jQuery);
+</script>

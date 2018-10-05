@@ -72,4 +72,27 @@ class DemandaController extends Controller
         return redirect('/');
     }
 
+    public function exportar(){
+        $montaExcel = $this->montaExcel($_REQUEST['demid']);
+
+        //excel.php
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-disposition: attachment; filename='.rand().'.xls');
+        echo $montaExcel;
+
+    }
+
+    public function montaExcel($demid){
+
+        $listDemandas = Demanda::all()->where('demid','=',$demid);
+
+        echo '<pre>';
+        var_dump($listDemandas);
+        echo '</pre>';
+        die;
+
+        $xls = "";
+        $xls .= "";
+    }
+
 }

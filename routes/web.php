@@ -14,6 +14,8 @@
 Route::get('/', 'DemandaController@index');
 Route::get('/cadastrar','DemandaController@cadastrar');
 Route::post('/add','DemandaController@add');
+Route::get('/exportar','DemandaController@exportar');
+
 Route::get('/addtabela',array('as'=>'addtabela','uses'=>'AjaxController@addtabela'));
 Route::get('/searchajax',array('as'=>'searchajax','uses'=>'AjaxController@autoComplete'));
 Route::get('/atualizaTabelas',array('as'=>'atualizaTabelas','uses'=>'AjaxController@atualizaTabelas'));
