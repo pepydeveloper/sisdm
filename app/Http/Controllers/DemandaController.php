@@ -32,15 +32,16 @@ class DemandaController extends Controller
         ]);
     }
 
-    public function add(){
+    public function add()
+    {
         //Salva a demanda
-        $data = explode('/',$_REQUEST['demdatafinalizacao']);
-        $_REQUEST['demdatafinalizacao'] = $data[2].'-'.$data[1].'-'.$data[0];
+        $data = explode('/', $_REQUEST['demdatafinalizacao']);
+        $_REQUEST['demdatafinalizacao'] = $data[2] . '-' . $data[1] . '-' . $data[0];
         $demid = Demanda::create($_REQUEST);
 
         //Salva os tipos de atendimento
-        foreach($_REQUEST['atendimento'] as $ateid => $atendimento){
-            if($atendimento['ocorrido'] == 'S'){
+        foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
+            if ($atendimento['ocorrido'] == 'S') {
                 $dat['datdescricao'] = $atendimento['descricao'];
                 $dat['datquantidade'] = $atendimento['quantidade'];
                 $dat['ateid'] = $ateid;
@@ -50,18 +51,22 @@ class DemandaController extends Controller
             }
         }
 
-        foreach($_REQUEST['funcionalidade'] as $funcionalidade){
+        if (isset($_REQUEST['funcionalidade'])) {
+            foreach ($_REQUEST['funcionalidade'] as $funcionalidade) {
+                $funcionalidade['sisid'] = $_REQUEST['sisid'];
+                $funcionalidade['demid'] = $demid->id;
+                $funcionalidade['funnome'] = strtoupper($funcionalidade['funnome']);
+                $funid = Funcionalidade::create($funcionalidade);
+                $funcionalidade['funid'] = $funid->id;
+                DemandaFuncionalidade::create($funcionalidade);
 
-            $funcionalidade['sisid'] = $_REQUEST['sisid'];
-            $funcionalidade['demid'] = $demid->id;
-            $funid = Funcionalidade::create($funcionalidade);
-            $funcionalidade['funid'] = $funid->id;
-            DemandaFuncionalidade::create($funcionalidade);
-
-            foreach($funcionalidade['tabela'] as $tabela){
-                $tabela['tabid'] = $tabela['tabid'];
-                $tabela['funid'] = $funcionalidade['funid'];
-                FuncionalideTabelas::create($tabela);
+                if(isset($funcionalidade['tabela'])){
+                    foreach ($funcionalidade['tabela'] as $tabela) {
+                        $tabela['tabid'] = $tabela['tabid'];
+                        $tabela['funid'] = $funcionalidade['funid'];
+                        FuncionalideTabelas::create($tabela);
+                    }
+                }
             }
         }
         return redirect('/');

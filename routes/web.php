@@ -18,4 +18,4 @@ Route::get('/addtabela',array('as'=>'addtabela','uses'=>'AjaxController@addtabel
 Route::get('/searchajax',array('as'=>'searchajax','uses'=>'AjaxController@autoComplete'));
 Route::get('/atualizaTabelas',array('as'=>'atualizaTabelas','uses'=>'AjaxController@atualizaTabelas'));
 Route::get('/verificademanda',array('as'=>'verificademanda','uses'=>'AjaxController@verificademanda'));
-Route::get('/autoComplete',array('as'=>'autoComplete','uses'=>'AjaxController@autoComplete'));
+Route::get('/autocomplete',array('as'=>'autocomplete','uses'=>'AjaxController@autocomplete'));

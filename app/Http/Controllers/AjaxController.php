@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Demanda;
+use App\Funcionalidade;
 use App\Tabelas;
 
 class AjaxController extends Controller
@@ -19,6 +20,7 @@ class AjaxController extends Controller
     }
 
     public function addtabela(){
+        $_REQUEST['tabnome'] == strtoupper($_REQUEST['tabnome']);
         Tabelas::create($_REQUEST);
 
         return json_encode(true);
@@ -34,24 +36,20 @@ class AjaxController extends Controller
         }
     }
 
-    public function autoComplete(Request $request) {
+    public function autoComplete() {
+        $funcionalidades = Funcionalidade::all()->where('funnome', 'like', '%"'.$_REQUEST['funnome'].'"%');;
+
 
         echo '<pre>';
-        var_dump($_REQUEST);
+        print_r($funcionalidades);
         echo '</pre>';
         die;
 
-        $query = $request->get('term','');
-
-        $products=Product::where('name','LIKE','%'.$query.'%')->get();
-
         $data=array();
-        foreach ($products as $product) {
-            $data[]=array('value'=>$product->name,'id'=>$product->id);
+        foreach ($funcionalidades as $funcionalidade) {
+            $data[]=array('funnome'=>$funcionalidade->funnome);
         }
-        if(count($data))
-            return $data;
-        else
-            return ['value'=>'No Result Found','id'=>''];
+        return $data;
     }
+
 }

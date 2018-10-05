@@ -5,7 +5,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
 </head>
 <style>
     html, body {
@@ -90,7 +90,8 @@
                 <option value="S">Sustentação</option>
             </select>
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
-            <input type="text" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control" placeholder="##/##/####"
+            <input type="text" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control"
+                   placeholder="##/##/####"
                    aria-describedby="basic-addon1">
         </div>
         <br>
@@ -141,7 +142,7 @@
                 Funcionalidade
             </button>
             <button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">
-                Cadastrat Nova Tabela
+                Cadastrar Nova Tabela
             </button>
             <input type="hidden" name="idfunc" value="0" id="idfunc">
             <br><br>
@@ -171,9 +172,9 @@
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Owner:</label>
                                 <select class="form-control" id="tabowner" name="tabowner">
-                                @foreach($owners as $owner)
-                                    <option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>
-                                @endforeach
+                                    @foreach($owners as $owner)
+                                        <option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
@@ -198,20 +199,58 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </body>
 </html>
 
 <script>
+    $(function() {
+        var esportes = [
+            "Natação",
+            "Futebol",
+            "Vôlei",
+            "Basquete"
+        ];
+        $("#funnome" ).autocomplete({
+            source: esportes
+        });
+    });
     $(document).ready(function () {
     });
 
     //Adiciona e remove linhas
     (function ($) {
+
+        autoComplete = function(funcionalidade) {
+            src = "{{ route('autocomplete') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    funnome:  $("#funnome_"+funcionalidade).val()
+                },
+                success: function (data) {
+                    // if (data) {
+                    //     $('#modalCadastroTabela').modal('hide')
+                    // } else {
+                    //     alert('ocorreu um erro ao cadastrar tabela.')
+                    // }
+                    $("#funnome_"+funcionalidade).autocomplete({
+                        source: data
+                    });
+                }
+            });
+        };
+
         AddFuncionalidade = function () {
-            if($('#sisid').val() == 0){
+            if ($('#sisid').val() == 0) {
                 $('#sisid').focus();
                 alert('Selecione um sistema');
-            }else {
+            } else {
                 var idfunc = $('#idfunc').val();
 
                 var func = "";
@@ -224,7 +263,7 @@
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Funcionalidade</span>';
                 func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
-                func += 'placeholder="Demanda" id="funnome" size="60" onchange="autoComplete(this)">';
+                func += 'placeholder="Demanda" id="funnome_'+idfunc+'" size="60" onkeyup="autoComplete('+idfunc+');">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
                 func += '<option value="E">Evolutiva</option>';
@@ -262,7 +301,6 @@
                 func += '</tbody>';
                 func += '</table>';
                 func += '</div>';
-
                 $("#divFuncionalidades").prepend(func);
 
                 idfunc++;
@@ -277,15 +315,15 @@
             cols += '<td><center>';
             cols += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
             cols += '</center></td>';
-            cols += '<td><select class="form-control" id="tabowner_'+idfunc+'_'+nrTabela+'" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabwoner]" ';
-            cols += 'onchange="buscaTabelas('+idfunc+','+nrTabela+')">';
+            cols += '<td><select class="form-control" id="tabowner_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabwoner]" ';
+            cols += 'onchange="buscaTabelas(' + idfunc + ',' + nrTabela + ')">';
             cols += '<option value="0">Selecione o Owner.. </option>';
             @foreach($owners as $owner)
-            cols += '<option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>';
+                cols += '<option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>';
             @endforeach
-            cols += '</select></td>';
-            cols += '<td><select class="form-control" id="tabnome_'+idfunc+'_'+nrTabela+'" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" ';
-            cols += 'onfocus="buscaTabelas('+idfunc+','+nrTabela+')">';
+                cols += '</select></td>';
+            cols += '<td><select class="form-control" id="tabnome_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" ';
+            cols += 'onfocus="buscaTabelas(' + idfunc + ',' + nrTabela + ')">';
             cols += '<option value="0">Selecione a tabela.. </option>';
             cols += '</select></td>';
             cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
@@ -327,61 +365,60 @@
             }
         }
 
-        cadastrarTabela = function (){
+        cadastrarTabela = function () {
             src = "{{ route('addtabela') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
                 type: "get",
                 data: {
-                    tabowner : $('#tabowner').val(), tabnome: $('#tabnome').val()
+                    tabowner: $('#tabowner').val(), tabnome: $('#tabnome').val()
                 },
-                success: function(data) {
-                    if(data){
+                success: function (data) {
+                    if (data) {
                         $('#modalCadastroTabela').modal('hide')
-                    }else{
+                    } else {
                         alert('ocorreu um erro ao cadastrar tabela.')
                     }
                 }
             });
         }
 
-        buscaTabelas = function(funcionalidade,tabela){
-            var owner = $('#tabowner_'+funcionalidade+'_'+tabela+' :selected').text();
+        buscaTabelas = function (funcionalidade, tabela) {
+            var owner = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').text();
             src = "{{ route('atualizaTabelas') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
                 type: "get",
                 data: {
-                    tabowner : owner
+                    tabowner: owner
                 },
-                success: function(dados) {
-                    if (dados.length > 0){
+                success: function (dados) {
+                    if (dados.length > 0) {
                         var option = '<option>Selecione a Tabela.. </option>';
-                        $.each(dados, function(i, obj){
-                            option += '<option value="'+obj.tabid+'">'+obj.tabnome+'</option>';
+                        $.each(dados, function (i, obj) {
+                            option += '<option value="' + obj.tabid + '">' + obj.tabnome + '</option>';
                         })
-                    }else{
+                    } else {
                         Reset();
                     }
-                    $('#tabnome_'+funcionalidade+'_'+tabela+'').html(option).show();
+                    $('#tabnome_' + funcionalidade + '_' + tabela + '').html(option).show();
                 }
             });
         }
 
-        verificademanda = function(){
-            // alert($('#demnumero').val());
+        verificademanda = function () {
             src = "{{ route('verificademanda') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
                 type: "get",
                 data: {
-                    demnumero : $('#demnumero').val()
+                    demnumero: $('#demnumero').val()
                 },
-                success: function(data) {
-                    if(data){
+                success: function (data) {
+                    if (data) {
                         $('#demnumero').val('');
                         $('#demnumero').focus();
                         alert('Demanda já existente.')
@@ -389,29 +426,6 @@
                 }
             });
         }
-
-        autoComplete = function(){
-            src = "{{ route('autoComplete') }}";
-            $("#funnome").autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: src,
-                        dataType: "json",
-                        data: {
-                            term : request.term
-                        },
-                        success: function(data) {
-                            response(data);
-
-                        }
-                    });
-                },
-                minLength: 3,
-            });
-        }
-
-
-
     })(jQuery);
 
 </script>
