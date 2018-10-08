@@ -80,7 +80,7 @@
     <div class="panel panel-success">
         <div class="panel-heading links"><a href="cadastrar"><span class="btn btn-primary glyphicon glyphicon-paste"
                                                                    aria-hidden="true"> Nova Demanda</a></div>
-        <table class="table  table-striped">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Ação</th>

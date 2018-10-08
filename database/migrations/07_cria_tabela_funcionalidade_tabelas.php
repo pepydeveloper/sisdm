@@ -15,8 +15,8 @@ class CriaTabelaFuncionalidadeTabelas extends Migration
     {
         Schema::create('funcionalidade_tabelas', function (Blueprint $table) {
             $table->increments('tafid');
-            $table->char('tafutilizada', 1);
-            $table->char('taftipoacesso', 2);
+            $table->string('tafutilizada');
+            $table->string('taftipoacesso');
             $table->integer('funid')->unsigned();
             $table->integer('tabid')->unsigned();
             $table->foreign('funid')->references('funid')->on('funcionalidade');

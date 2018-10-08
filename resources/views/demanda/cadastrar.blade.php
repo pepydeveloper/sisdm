@@ -87,9 +87,9 @@
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Tipo de Alteração</span>
             <select class="form-control" name="demtipo">
-                <option value="E">Evolutiva</option>
-                <option value="N">Nova Funcionalidade</option>
-                <option value="S">Sustentação</option>
+                <option value="Evolutiva">Evolutiva</option>
+                <option value="Nova">Nova Funcionalidade</option>
+                <option value="Sustentação">Sustentação</option>
             </select>
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
             <input type="text" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control"
@@ -279,9 +279,9 @@
                 func += 'placeholder="Demanda" id="funnome_'+idfunc+'" size="60" onkeyup="autoCompleteFuncionalidade('+idfunc+');">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
-                func += '<option value="E">Evolutiva</option>';
-                func += '<option value="N">Nova Funcionalidade</option>';
-                func += '<option value="S">Sustentação</option>';
+                func += '<option value="Evolutiva">Evolutiva</option>';
+                func += '<option value="Nova">Nova Funcionalidade</option>';
+                func += '<option value="Sustentação">Sustentação</option>';
                 func += '</select>';
                 func += '</div>';
                 func += '<br>';
@@ -342,9 +342,9 @@
             cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
                 '<input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="N" checked>Não</td>';
             cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]">\n' +
-                '        <option value="E">Escrita</option>\n' +
-                '        <option value="L">Leitura</option>\n' +
-                '        <option value="EL">Escrita e Leitura</option>\n' +
+                '        <option value="Escrita">Escrita</option>\n' +
+                '        <option value="Leitura">Leitura</option>\n' +
+                '        <option value="Escrita e Leitura">Escrita e Leitura</option>\n' +
                 '    </select></td>';
             newRow.append(cols);
             $("#tabela_funcionalidades_" + idfunc).append(newRow);
