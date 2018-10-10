@@ -139,16 +139,13 @@
             <div class="panel-heading">
                 <center><b>Correções de Código / Tabelas</b></center>
             </div>
+            <div id="divFuncionalidades"></div>
             <br>
             <button type="button" onclick="AddFuncionalidade()" type="button" class="btn btn-success">Nova
                 Funcionalidade
             </button>
-            <button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">
-                Cadastrar Nova Tabela
-            </button>
             <input type="hidden" name="idfunc" value="0" id="idfunc">
             <br><br>
-            <div id="divFuncionalidades"></div>
         </div>
         <br>
         <div class="input-group">
@@ -302,6 +299,7 @@
                 func += '<br>';
                 func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
                 func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
+                func += '<button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">Cadastrar Nova Tabela</button>';
                 func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
                 func += '<tbody>';
                 func += '<tr>';
@@ -314,7 +312,7 @@
                 func += '</tbody>';
                 func += '</table>';
                 func += '</div>';
-                $("#divFuncionalidades").prepend(func);
+                $("#divFuncionalidades").append(func);
 
                 idfunc++;
                 $('#idfunc').val(idfunc);
