@@ -92,9 +92,7 @@
                 <option value="Sustentação">Sustentação</option>
             </select>
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
-            <input type="text" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control"
-                   placeholder="##/##/####"
-                   aria-describedby="basic-addon1">
+            <input type="date" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control" >
         </div>
         <br>
 
@@ -297,6 +295,15 @@
                 func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
                 func += '</div>';
                 func += '<br>';
+                // func += '<div class="input-group">';
+                // func += '<span class="input-group-addon">Evidência 1</span>';
+                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][1]">';
+                // func += '<span class="input-group-addon">Evidência 2</span>';
+                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][2]">';
+                // func += '<span class="input-group-addon">Evidência 3</span>';
+                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][3]">';
+                // func += '</div>';
+                // func += '<br>';
                 func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
                 func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
                 func += '<button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">Cadastrar Nova Tabela</button>';

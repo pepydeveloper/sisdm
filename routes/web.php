@@ -14,6 +14,7 @@
 Route::get('/', 'DemandaController@index');
 Route::get('/cadastrar','DemandaController@cadastrar');
 Route::post('/add','DemandaController@add');
+//Route::get('/editar/{id}','DemandaController@editar');
 Route::get('/exportar','DemandaController@exportar');
 
 Route::get('/addtabela',array('as'=>'addtabela','uses'=>'AjaxController@addtabela'));

@@ -95,8 +95,8 @@
                 <tr>
                     <td>
                         <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demid}});" target="_blank"></a>
-                        <span class="btn btn-danger glyphicon glyphicon-remove-sign"></span>
-                        <span class="btn btn-warning glyphicon glyphicon-eye-open"></span>
+                        {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="editar/{{$demanda->demid}}"></a>--}}
+                        <a class="btn btn-warning glyphicon glyphicon-eye-open" href="editar/{{$demanda->demid}}"></a>
                     </td>
                     <td>{{$demanda->demnumero}}</td>
                     <td>{{$demanda->demdescricao}}</td>

@@ -33,6 +33,32 @@ class DemandaController extends Controller
         ]);
     }
 
+//    public function editar($id){
+//        $atendimentos = Atendimento::all();
+//        $sistemas = Sistema::all();
+//        $tabelas = Tabelas::all();
+//        $owners = Tabelas::all('tabowner')->sortBy("tabowner")->groupBy('tabowner');
+//
+//        $demanda = DB::table('demanda')
+//            ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
+//            ->where('demid','=',$id)
+//            ->get();
+//
+//        $atendimentosDemanda = DB::table('atendimento')
+//            ->leftjoin('demanda_atendimento', 'demanda_atendimento.ateid', '=', 'atendimento.ateid')
+//            ->leftjoin('demanda', 'demanda.demid', '=', 'demanda_atendimento.demid')
+//            ->where('demanda.demid','=',$id)
+//            ->get();
+//
+//        return view('demanda.editar',[
+//            'atendimentos' => $atendimentos,
+//            'sistemas' => $sistemas,
+//            'tabelas' => $tabelas,
+//            'owners' => $owners,
+//            'demanda' => $demanda,
+//        ]);
+//    }
+
     public function add()
     {
         //Salva a demanda
