@@ -33,43 +33,43 @@ class DemandaController extends Controller
         ]);
     }
 
-//    public function editar($id){
-//        $atendimentos = Atendimento::all();
-//        $sistemas = Sistema::all();
-//        $tabelas = Tabelas::all();
-//        $owners = Tabelas::all('tabowner')->sortBy("tabowner")->groupBy('tabowner');
-//
-//        $demanda = DB::table('demanda')
-//            ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
-//            ->where('demid','=',$id)
-//            ->get();
-//
-//        $atendimentosDemanda = DB::table('atendimento')
-//            ->leftjoin('demanda_atendimento', 'demanda_atendimento.ateid', '=', 'atendimento.ateid')
-//            ->leftjoin('demanda', 'demanda.demid', '=', 'demanda_atendimento.demid')
-//            ->where('demanda.demid','=',$id)
-//            ->get();
-//
-//        return view('demanda.editar',[
-//            'atendimentos' => $atendimentos,
-//            'sistemas' => $sistemas,
-//            'tabelas' => $tabelas,
-//            'owners' => $owners,
-//            'demanda' => $demanda,
-//        ]);
-//    }
+    public function editar($id){
+        $atendimentos = Atendimento::all();
+        $sistemas = Sistema::all();
+        $tabelas = Tabelas::all();
+        $owners = Tabelas::all('tabowner')->sortBy("tabowner")->groupBy('tabowner');
+
+        $demanda = DB::table('demanda')
+            ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
+            ->where('demid','=',$id)
+            ->get();
+
+        $atendimentosDemanda = DB::table('atendimento')
+            ->leftjoin('demanda_atendimento', 'demanda_atendimento.ateid', '=', 'atendimento.ateid')
+            ->leftjoin('demanda', 'demanda.demid', '=', 'demanda_atendimento.demid')
+            ->where('demanda.demid','=',$id)
+            ->get();
+
+        return view('demanda.editar',[
+            'atendimentos' => $atendimentos,
+            'sistemas' => $sistemas,
+            'tabelas' => $tabelas,
+            'owners' => $owners,
+            'demanda' => $demanda,
+            '$atendimentosDemanda' => $atendimentosDemanda,
+        ]);
+    }
 
     public function add()
     {
         //Salva a demanda
-        $data = explode('/', $_REQUEST['demdatafinalizacao']);
-        $_REQUEST['demdatafinalizacao'] = $data[2] . '-' . $data[1] . '-' . $data[0];
+        $_REQUEST['demdescricao'] = strtoupper($_REQUEST['demdescricao']);
         $demid = Demanda::create($_REQUEST);
 
         //Salva os tipos de atendimento
         foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
             if ($atendimento['ocorrido'] == 'S') {
-                $dat['datdescricao'] = $atendimento['descricao'];
+                $dat['datdescricao'] = strtoupper($atendimento['descricao']);
                 $dat['datquantidade'] = $atendimento['quantidade'];
                 $dat['ateid'] = $ateid;
                 $dat['demid'] = $demid->id;
@@ -85,6 +85,9 @@ class DemandaController extends Controller
                 $funcionalidade['funnome'] = strtoupper($funcionalidade['funnome']);
                 $funid = Funcionalidade::create($funcionalidade);
                 $funcionalidade['funid'] = $funid->id;
+                $funcionalidade['defdescricao'] = strtoupper($funcionalidade['defdescricao']);
+                $funcionalidade['defalteracaoarquivos'] = strtoupper($funcionalidade['defalteracaoarquivos']);
+                $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
                 DemandaFuncionalidade::create($funcionalidade);
 
                 if(isset($funcionalidade['tabela'])){

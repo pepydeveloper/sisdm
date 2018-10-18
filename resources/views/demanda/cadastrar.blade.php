@@ -68,12 +68,12 @@
         {{ csrf_field() }}
         <div class="input-group">
             <span class="input-group-addon">Demanda</span>
-            <input type="text" class="form-control" name="demnumero" id="demnumero"
-                   placeholder="Demanda" size="60" onblur="verificademanda()">
+            <input type="number" class="form-control" name="demnumero" id="demnumero"
+                   placeholder="Demanda" size="60" onblur="verificaDemanda()">
             <span class="input-group-addon" id="basic-addon1">Sistema</span>
             <select class="form-control" name="sisid">
                 @foreach($sistemas as $sistema)
-                    <option value="{{$sistema->sisid}}">{{$sistema->siscodigo}} - {{$sistema->sisnome}}</option>
+                    <option value="{{$sistema->sisid}}">{{$sistema->sisnome}}</option>
                 @endforeach
             </select>
         </div>
@@ -120,7 +120,7 @@
                                    onchange="liberaCampos('s',{{ $atendimento->ateid }})"></td>
                         <td><input type="radio" name="atendimento[{{ $atendimento->ateid }}][ocorrido]" value="N"
                                    onchange="liberaCampos('n',{{ $atendimento->ateid }})" checked></td>
-                        <td width="5%"><input type="text" disabled class="form-control" placeholder="QTD"
+                        <td width="5%"><input type="number" disabled class="form-control" placeholder="QTD"
                                               name="atendimento[{{ $atendimento->ateid }}][quantidade]"
                                               id="quantidade_{{ $atendimento->ateid }}" aria-describedby="basic-addon1"
                                               size="8"></td>
@@ -139,7 +139,7 @@
             </div>
             <div id="divFuncionalidades"></div>
             <br>
-            <button type="button" onclick="AddFuncionalidade()" type="button" class="btn btn-success">Nova
+            <button type="button" onclick="addFuncionalidade()" type="button" class="btn btn-success">Nova
                 Funcionalidade
             </button>
             <input type="hidden" name="idfunc" value="0" id="idfunc">
@@ -178,9 +178,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
-                        <button type="button" class="btn btn-primary" onclick="cadastrarTabela()">Cadastrar</button>
+                        <button type="button" class="btn btn-primary" onclick="cadastrarTabela()" data-dismiss="modal">Cadastrar</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </form>
@@ -200,7 +201,7 @@
 <script>
     (function ($) {
         autoCompleteFuncionalidade = function(funcionalidade) {
-            src = "{{ route('autocompletefuncionalidade') }}";
+            src = "{{ route('autoCompleteFuncionalidade') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
@@ -218,7 +219,7 @@
 
         autoCompleteOwner = function() {
             if($('#tabowner').val().length > 3){
-                src = "{{ route('autocompleteowner') }}";
+                src = "{{ route('autoCompleteOwner') }}";
                 $.ajax({
                     url: src,
                     dataType: "json",
@@ -237,7 +238,7 @@
 
         autoCompleteTabela = function() {
             if($('#tabnome').val().length > 3){
-                src = "{{ route('autocompletetabela') }}";
+                src = "{{ route('autoCompleteTabela') }}";
                 $.ajax({
                     url: src,
                     dataType: "json",
@@ -254,7 +255,7 @@
             }
         };
 
-        AddFuncionalidade = function () {
+        addFuncionalidade = function () {
             if ($('#sisid').val() == 0) {
                 $('#sisid').focus();
                 alert('Selecione um sistema');
@@ -265,13 +266,14 @@
                 func += '<div class="panel panel-success" id="funcionaldades_' + idfunc + '">';
                 func += '<div class="panel-heading">';
                 func += '<button type="button"  style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm"';
-                func += 'onclick="RemoveFuncionalidade(' + idfunc + ')">X';
+                func += 'onclick="removeFuncionalidade(' + idfunc + ')" >X';
                 func += '</button> &nbsp;<span class="badge badge-pill badge-primary">Funcionalidade ' + idfunc + '</span>';
                 func += '</div>';
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Funcionalidade</span>';
                 func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
-                func += 'placeholder="Demanda" id="funnome_'+idfunc+'" size="60" onkeyup="autoCompleteFuncionalidade('+idfunc+');">';
+                func += 'placeholder="Nome da Funcionalidade" id="funnome_'+idfunc+'" size="60" ';
+                func += 'onkeyup="autoCompleteFuncionalidade('+idfunc+');" onblur="verificaFuncionalidade(this)">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
                 func += '<option value="Evolutiva">Evolutiva</option>';
@@ -282,17 +284,17 @@
                 func += '<br>';
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Descrição da Manutenção</span>';
-                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
+                func += '<textarea class="form-control" placeholder="Descrição detalhada da manutenção" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
                 func += '</div>';
                 func += '<br>';
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Alteração em Arquivos ou Tabelas?</span>';
-                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defalteracaoarquivos]"></textarea>';
+                func += '<textarea class="form-control" placeholder="Informação dos arquivos e tabelas alterados" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defalteracaoarquivos]"></textarea>';
                 func += '</div>';
                 func += '<br>';
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Carga de Dados</span>';
-                func += '<textarea class="form-control" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
+                func += '<textarea class="form-control" placeholder="Informação detalhada da carga de dados." aria-label="With textarea" name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
                 func += '</div>';
                 func += '<br>';
                 // func += '<div class="input-group">';
@@ -304,9 +306,11 @@
                 // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][3]">';
                 // func += '</div>';
                 // func += '<br>';
-                func += '<button onclick="AddTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
+                func += '<button onclick="addTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
                 func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
                 func += '<button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">Cadastrar Nova Tabela</button>';
+                func += '<br>';
+                func += '<br>';
                 func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
                 func += '<tbody>';
                 func += '<tr>';
@@ -326,12 +330,12 @@
             }
         };
 
-        AddTableRow = function (idfunc) {
+        addTableRow = function (idfunc) {
             var nrTabela = $('#qtdtabelas_' + idfunc).val();
             var newRow = $("<tr>");
             var cols = "";
             cols += '<td><center>';
-            cols += '<button type="button" onclick="RemoveRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
+            cols += '<button type="button" onclick="removeRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
             cols += '</center></td>';
             cols += '<td><select class="form-control" id="tabowner_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabwoner]" ';
             cols += 'onchange="buscaTabelas(' + idfunc + ',' + nrTabela + ')">';
@@ -358,12 +362,12 @@
             return false;
         };
 
-        RemoveFuncionalidade = function (idfunc) {
+        removeFuncionalidade = function (idfunc) {
             $("div").remove("#funcionaldades_" + idfunc);
             return false;
         }
 
-        RemoveRow = function (item) {
+        removeRow = function (item) {
             var tr = $(item).closest('tr');
             tr.fadeOut(400, function () {
                 tr.remove();
@@ -384,7 +388,7 @@
         }
 
         cadastrarTabela = function () {
-            src = "{{ route('addtabela') }}";
+            src = "{{ route('addTabela') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
@@ -396,7 +400,7 @@
                     if (data) {
                         $('#modalCadastroTabela').modal('hide')
                     } else {
-                        alert('ocorreu um erro ao cadastrar tabela.')
+                        alert('Tabela já existente.')
                     }
                 }
             });
@@ -426,8 +430,8 @@
             });
         }
 
-        verificademanda = function () {
-            src = "{{ route('verificademanda') }}";
+        verificaDemanda = function () {
+            src = "{{ route('verificaDemanda') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
@@ -437,9 +441,42 @@
                 },
                 success: function (data) {
                     if (data) {
-                        $('#demnumero').val('');
-                        $('#demnumero').focus();
-                        alert('Demanda já existente.')
+                        var r = confirm("Demanda já existe, deseja carregar os dados?");
+                        if (r == true) {
+
+                            //busca a demanda e redireciona para a tela dela.
+                            
+
+                        } else {
+                            $('#demnumero').val('');
+                            $('#demnumero').focus();
+                        }
+                    }
+                }
+            });
+        }
+
+        verificaFuncionalidade = function (funnome) {
+            src = "{{ route('verificaFuncionalidade') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    funnome: funnome.value
+                },
+                success: function (data) {
+                    if (data) {
+                        var r = confirm("Funcionalidade já existe, deseja carregar os dados do ultimo documento?");
+                        if (r == true) {
+
+
+                            // carregar tabelas
+
+                        } else {
+                            $('#demnumero').val('');
+                            $('#demnumero').focus();
+                        }
                     }
                 }
             });

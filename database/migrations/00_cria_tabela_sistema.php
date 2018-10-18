@@ -16,7 +16,6 @@ class CriaTabelaSistema extends Migration
         Schema::create('sistema', function (Blueprint $table) {
             $table->increments('sisid');
             $table->string('sisnome');
-            $table->integer('siscodigo');
             $table->timestamps();
         });
     }

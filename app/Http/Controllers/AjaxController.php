@@ -20,11 +20,20 @@ class AjaxController extends Controller
             return json_encode($data);
     }
 
-    public function addtabela(){
-        $_REQUEST['tabnome'] == strtoupper($_REQUEST['tabnome']);
-        Tabelas::create($_REQUEST);
+    public function addTabela(){
+        $_REQUEST['tabnome'] = strtoupper($_REQUEST['tabnome']);
+        $_REQUEST['tabowner'] = strtoupper($_REQUEST['tabowner']);
 
-        return json_encode(true);
+        $existeTabela = Tabelas::all()
+            ->where('tabnome','=',$_REQUEST['tabnome'])
+            ->where('tabowner','=',$_REQUEST['tabowner']);
+
+        if(count($existeTabela) == 0){
+            Tabelas::create($_REQUEST);
+            return json_encode(true);
+        }else{
+            return json_encode(false);
+        }
     }
 
     public function verificaDemanda(){
@@ -37,7 +46,17 @@ class AjaxController extends Controller
         }
     }
 
-    public function autocompletefuncionalidade() {
+    public function verificaFuncionalidade(){
+        $demanda = Funcionalidade::all()->where('funnome','=', $_REQUEST['funnome'])->first();
+
+        if(!is_null($demanda)){
+            return json_encode(true);
+        }else{
+            return json_encode(false);
+        }
+    }
+
+    public function autoCompleteFuncionalidade() {
         $funcionalidades = DB::table('funcionalidade')->select('funnome')
             ->where('funnome', 'like', '%'.$_REQUEST['funnome'].'%')
             ->get();
@@ -49,7 +68,7 @@ class AjaxController extends Controller
         return $data;
     }
 
-    public function autocompleteowner() {
+    public function autoCompleteOwner() {
         $owners = DB::table('tabelas')->select('tabowner')
             ->where('tabowner', 'like', '%'.$_REQUEST['tabowner'].'%')
             ->get()->sortBy('tabowner');
@@ -61,7 +80,7 @@ class AjaxController extends Controller
         return $data;
     }
 
-    public function autocompletetabela() {
+    public function autoCompleteTabela() {
         $tabelas = DB::table('tabelas')->select('tabnome')
             ->where('tabnome', 'like', '%'.$_REQUEST['tabnome'].'%')
             ->get()->sortBy('tabnome');

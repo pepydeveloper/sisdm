@@ -14,13 +14,14 @@
 Route::get('/', 'DemandaController@index');
 Route::get('/cadastrar','DemandaController@cadastrar');
 Route::post('/add','DemandaController@add');
-//Route::get('/editar/{id}','DemandaController@editar');
+Route::get('/editar/{id}','DemandaController@editar');
 Route::get('/exportar','DemandaController@exportar');
 
-Route::get('/addtabela',array('as'=>'addtabela','uses'=>'AjaxController@addtabela'));
+Route::get('/addTabela',array('as'=>'addTabela','uses'=>'AjaxController@addTabela'));
 Route::get('/searchajax',array('as'=>'searchajax','uses'=>'AjaxController@autoComplete'));
 Route::get('/atualizaTabelas',array('as'=>'atualizaTabelas','uses'=>'AjaxController@atualizaTabelas'));
-Route::get('/verificademanda',array('as'=>'verificademanda','uses'=>'AjaxController@verificademanda'));
-Route::get('/autocompletefuncionalidade',array('as'=>'autocompletefuncionalidade','uses'=>'AjaxController@autocompletefuncionalidade'));
-Route::get('/autocompleteowner',array('as'=>'autocompleteowner','uses'=>'AjaxController@autocompleteowner'));
-Route::get('/autocompletetabela',array('as'=>'autocompletetabela','uses'=>'AjaxController@autocompletetabela'));
+Route::get('/verificaDemanda',array('as'=>'verificaDemanda','uses'=>'AjaxController@verificaDemanda'));
+Route::get('/verificaFuncionalidade',array('as'=>'verificaFuncionalidade','uses'=>'AjaxController@verificaFuncionalidade'));
+Route::get('/autoCompleteFuncionalidade',array('as'=>'autoCompleteFuncionalidade','uses'=>'AjaxController@autoCompleteFuncionalidade'));
+Route::get('/autoCompleteOwner',array('as'=>'autoCompleteOwner','uses'=>'AjaxController@autoCompleteOwner'));
+Route::get('/autoCompleteTabela',array('as'=>'autoCompleteTabela','uses'=>'AjaxController@autoCompleteTabela'));
