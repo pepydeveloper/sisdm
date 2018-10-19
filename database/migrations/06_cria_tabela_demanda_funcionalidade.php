@@ -16,9 +16,9 @@ class CriaTabelaDemandaFuncionalidade extends Migration
         Schema::create('demanda_funcionalidade', function (Blueprint $table) {
             $table->increments('defid');
             $table->char('deftipomudanca');
-            $table->string('defdescricao');
-            $table->string('defalteracaoarquivos');
-            $table->string('defcargadados');
+            $table->string('defdescricao',5000);
+            $table->string('defalteracaoarquivos', 5000);
+            $table->string('defcargadados', 5000);
             $table->integer('demid')->unsigned();
             $table->integer('funid')->unsigned();
             $table->foreign('demid')->references('demid')->on('demanda');

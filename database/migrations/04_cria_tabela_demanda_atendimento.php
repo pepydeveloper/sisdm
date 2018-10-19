@@ -15,8 +15,8 @@ class CriaTabelaDemandaAtendimento extends Migration
     {
         Schema::create('demanda_atendimento', function (Blueprint $table) {
             $table->increments('datid');
-            $table->string('datdescricao');
             $table->integer('datquantidade');
+            $table->string('datdescricao', 5000);
             $table->integer('demid')->unsigned();
             $table->integer('ateid')->unsigned();
             $table->foreign('demid')->references('demid')->on('demanda');

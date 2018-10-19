@@ -16,7 +16,7 @@ class CriaTabelaDemanda extends Migration
         Schema::create('demanda', function (Blueprint $table) {
             $table->increments('demid');
             $table->integer('demnumero');
-            $table->string('demdescricao');
+            $table->string('demdescricao', 5000);
             $table->string('demtipo');
             $table->dateTime('demdatafinalizacao');
             $table->integer('sisid')->unsigned();
