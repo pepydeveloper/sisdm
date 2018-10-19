@@ -121,6 +121,11 @@ class DemandaController extends Controller
                 }
             }
 
+            //cria o zip para download
+            $zipper = new \Chumper\Zipper\Zipper;
+            $files = glob(public_path('demandas/'.$demid->id.'/*'));
+            $zipper->make('demandas/'. $demid->id.'.zip')->add($files);
+
             DB::commit();
             return redirect('/');
         }catch(\Exception $e) {
@@ -132,14 +137,13 @@ class DemandaController extends Controller
 
     public function exportar(){
 
-        //excel.php
-//        if(!is_dir('demandas\6\\')){
-//            mkdir('demandas\6\\');
-//        }
-        header('Content-Type: application/vnd.ms-excel; charset=utf-8"');
-        header('Content-disposition: attachment; filename='.$montaExcel['nomeDoc'].'.xls');
+        return response()->download(public_path('demandas/'.$_REQUEST['demid'].'/'.$_REQUEST['demid'].'.zip'));
+
+//        $montaExcel = $this->montaExcel($_REQUEST['demid']);
+//        header('Content-Type: application/vnd.ms-excel; charset=utf-8"');
+//        header('Content-disposition: attachment; filename='.$montaExcel['nomeDoc'].'.xls');
 //        file_put_contents('demandas\\' . $montaExcel['nomeDoc'].'.xls', $montaExcel['xls']);
-        echo utf8_decode($montaExcel['xls']);
+//        echo utf8_decode($montaExcel['xls']);
     }
 
     public function montaExcel($demid){
