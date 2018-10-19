@@ -12,6 +12,9 @@ class DemandaFuncionalidade extends Model
         'defdescricao',
         'defalteracaoarquivos',
         'defcargadados',
+        'evidencia1',
+        'evidencia2',
+        'evidencia3',
         'demid',
         'funid'
     ];

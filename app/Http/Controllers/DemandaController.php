@@ -11,6 +11,7 @@ use App\DemandaFuncionalidade;
 use App\FuncionalideTabelas;
 use App\Tabelas;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class DemandaController extends Controller
 {
@@ -60,54 +61,84 @@ class DemandaController extends Controller
         ]);
     }
 
-    public function add()
+    public function add(Request $request)
     {
-        //Salva a demanda
-        $_REQUEST['demdescricao'] = strtoupper($_REQUEST['demdescricao']);
-        $demid = Demanda::create($_REQUEST);
+        DB::beginTransaction();
+        try {
+            //Salva a demanda
+            $_REQUEST['demdescricao'] = strtoupper($_REQUEST['demdescricao']);
+            $demid = Demanda::create($_REQUEST);
 
-        //Salva os tipos de atendimento
-        foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
-            if ($atendimento['ocorrido'] == 'S') {
-                $dat['datdescricao'] = strtoupper($atendimento['descricao']);
-                $dat['datquantidade'] = $atendimento['quantidade'];
-                $dat['ateid'] = $ateid;
-                $dat['demid'] = $demid->id;
+            //Salva os tipos de atendimento
+            foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
+                if ($atendimento['ocorrido'] == 'S') {
+                    $dat['datdescricao'] = strtoupper($atendimento['descricao']);
+                    $dat['datquantidade'] = $atendimento['quantidade'];
+                    $dat['ateid'] = $ateid;
+                    $dat['demid'] = $demid->id;
 
-                DemandaAtendimento::create($dat);
+                    DemandaAtendimento::create($dat);
+                }
             }
-        }
 
-        if (isset($_REQUEST['funcionalidade'])) {
-            foreach ($_REQUEST['funcionalidade'] as $funcionalidade) {
-                $funcionalidade['sisid'] = $_REQUEST['sisid'];
-                $funcionalidade['demid'] = $demid->id;
-                $funcionalidade['funnome'] = strtoupper($funcionalidade['funnome']);
-                $funid = Funcionalidade::create($funcionalidade);
-                $funcionalidade['funid'] = $funid->id;
-                $funcionalidade['defdescricao'] = strtoupper($funcionalidade['defdescricao']);
-                $funcionalidade['defalteracaoarquivos'] = strtoupper($funcionalidade['defalteracaoarquivos']);
-                $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
-                DemandaFuncionalidade::create($funcionalidade);
+            if (isset($request->funcionalidade)) {
+                foreach ($request->funcionalidade as $nrFunc => $funcionalidade) {
+                    $funcionalidade['sisid'] = $_REQUEST['sisid'];
+                    $funcionalidade['demid'] = $demid->id;
+                    $funcionalidade['funnome'] = strtoupper($funcionalidade['funnome']);
+                    $funid = Funcionalidade::create($funcionalidade);
 
-                if(isset($funcionalidade['tabela'])){
-                    foreach ($funcionalidade['tabela'] as $tabela) {
-                        $tabela['tabid'] = $tabela['tabid'];
-                        $tabela['funid'] = $funcionalidade['funid'];
-                        FuncionalideTabelas::create($tabela);
+                    $funcionalidade['funid'] = $funid->id;
+                    $funcionalidade['defdescricao'] = strtoupper($funcionalidade['defdescricao']);
+                    $funcionalidade['defalteracaoarquivos'] = strtoupper($funcionalidade['defalteracaoarquivos']);
+                    $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
+
+
+                    if (isset($funcionalidade['evidencia1'])) {
+                        $funcionalidade['evidencia1']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia1']->getClientOriginalName());
+                        $funcionalidade['evidencia1'] = $funcionalidade['evidencia1']->getClientOriginalName();
+                    }
+
+                    if (isset($funcionalidade['evidencia2'])) {
+                        $funcionalidade['evidencia2']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia2']->getClientOriginalName());
+                        $funcionalidade['evidencia2'] = $funcionalidade['evidencia2']->getClientOriginalName();
+                    }
+
+                    if (isset($funcionalidade['evidencia3'])) {
+                        $funcionalidade['evidencia3']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia3']->getClientOriginalName());
+                        $funcionalidade['evidencia3'] = $funcionalidade['evidencia3']->getClientOriginalName();
+                    }
+
+                    DemandaFuncionalidade::create($funcionalidade);
+
+                    if (isset($funcionalidade['tabela'])) {
+                        foreach ($funcionalidade['tabela'] as $tabela) {
+                            $tabela['tabid'] = $tabela['tabid'];
+                            $tabela['funid'] = $funcionalidade['funid'];
+                            FuncionalideTabelas::create($tabela);
+                        }
                     }
                 }
             }
+
+            DB::commit();
+            return redirect('/');
+        }catch(\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-        return redirect('/');
+
     }
 
     public function exportar(){
-        $montaExcel = $this->montaExcel($_REQUEST['demid']);
 
         //excel.php
+//        if(!is_dir('demandas\6\\')){
+//            mkdir('demandas\6\\');
+//        }
         header('Content-Type: application/vnd.ms-excel; charset=utf-8"');
         header('Content-disposition: attachment; filename='.$montaExcel['nomeDoc'].'.xls');
+//        file_put_contents('demandas\\' . $montaExcel['nomeDoc'].'.xls', $montaExcel['xls']);
         echo utf8_decode($montaExcel['xls']);
     }
 

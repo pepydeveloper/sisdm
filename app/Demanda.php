@@ -11,7 +11,8 @@ class Demanda extends Model
         'demnumero',
         'demdescricao',
         'demtipo',
-        'demdatafinalizacao',
+        'demdatainicio' => '',
+        'demdatafinalizacao' => '',
         'sisid'
     ];
 

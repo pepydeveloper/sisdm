@@ -101,15 +101,7 @@
                     <td>{{$demanda->demnumero}}</td>
                     <td>{{$demanda->demdescricao}}</td>
                     <td>{{$demanda->sistema->sisnome}}</td>
-                    <td>
-                        @if($demanda->demtipo == 'E')
-                            Evolutiva
-                        @elseif($demanda->demtipo == 'N')
-                            Nova Funcionalidade
-                        @else
-                            Sustentacao
-                        @endif
-                    </td>
+                    <td>{{$demanda->demtipo}}</td>
                 </tr>
             @endforeach
             </tbody>

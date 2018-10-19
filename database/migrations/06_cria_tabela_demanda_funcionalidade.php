@@ -19,6 +19,9 @@ class CriaTabelaDemandaFuncionalidade extends Migration
             $table->string('defdescricao',5000);
             $table->string('defalteracaoarquivos', 5000);
             $table->string('defcargadados', 5000);
+            $table->string('evidencia1');
+            $table->string('evidencia2');
+            $table->string('evidencia3');
             $table->integer('demid')->unsigned();
             $table->integer('funid')->unsigned();
             $table->foreign('demid')->references('demid')->on('demanda');

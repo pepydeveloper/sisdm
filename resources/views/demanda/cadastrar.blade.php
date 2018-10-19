@@ -64,7 +64,7 @@
     </div>
 </div>
 <div class="well center">
-    <form action="{{ url('/add') }}" method="POST">
+    <form action="{{ url('/add') }}" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="input-group">
             <span class="input-group-addon">Demanda</span>
@@ -88,9 +88,11 @@
             <span class="input-group-addon" id="basic-addon1">Tipo de Alteração</span>
             <select class="form-control" name="demtipo">
                 <option value="Evolutiva">Evolutiva</option>
-                <option value="Nova">Nova Funcionalidade</option>
+                <option value="Nova Funcionalidade">Nova Funcionalidade</option>
                 <option value="Sustentação">Sustentação</option>
             </select>
+            <span class="input-group-addon" id="basic-addon1">Data Início</span>
+            <input type="date" name="demdatainicio" id="demdatainicio" class="form-control" >
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
             <input type="date" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control" >
         </div>
@@ -276,9 +278,9 @@
                 func += 'onkeyup="autoCompleteFuncionalidade('+idfunc+');" onblur="verificaFuncionalidade(this)">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
-                func += '<option value="Evolutiva">Evolutiva</option>';
-                func += '<option value="Nova">Nova Funcionalidade</option>';
-                func += '<option value="Sustentação">Sustentação</option>';
+                func += '<option value="Alterada">Alterada</option>';
+                func += '<option value="Incluída">Incluída</option>';
+                func += '<option value="Excluída">Excluída</option>';
                 func += '</select>';
                 func += '</div>';
                 func += '<br>';
@@ -297,15 +299,15 @@
                 func += '<textarea class="form-control" placeholder="Informação detalhada da carga de dados." aria-label="With textarea" name="funcionalidade[' + idfunc + '][defcargadados]"></textarea>';
                 func += '</div>';
                 func += '<br>';
-                // func += '<div class="input-group">';
-                // func += '<span class="input-group-addon">Evidência 1</span>';
-                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][1]">';
-                // func += '<span class="input-group-addon">Evidência 2</span>';
-                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][2]">';
-                // func += '<span class="input-group-addon">Evidência 3</span>';
-                // func += '<input type="file" class="form-control"  name="evidencia[' + idfunc + '][defcargadados][3]">';
-                // func += '</div>';
-                // func += '<br>';
+                func += '<div class="input-group">';
+                func += '<span class="input-group-addon">Evidência 1</span>';
+                func += '<input type="file" class="form-control"   name="funcionalidade[' + idfunc + '][evidencia1]">';
+                func += '<span class="input-group-addon">Evidência 2</span>';
+                func += '<input type="file" class="form-control"  name="funcionalidade[' + idfunc + '][evidencia2]">';
+                func += '<span class="input-group-addon">Evidência 3</span>';
+                func += '<input type="file" class="form-control"  name="funcionalidade[' + idfunc + '][evidencia3]">';
+                func += '</div>';
+                func += '<br>';
                 func += '<button onclick="addTableRow(' + idfunc + ')" type="button" class="btn btn-primary">Adicionar Tabelas a funcionalidade</button>&nbsp;&nbsp;';
                 func += '<input type="hidden" value="0" id="qtdtabelas_' + idfunc + '">';
                 func += '<button type="button" data-toggle="modal" data-target="#modalCadastroTabela" class="btn btn-warning">Cadastrar Nova Tabela</button>';
