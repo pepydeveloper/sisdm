@@ -20,6 +20,7 @@ Route::get('/exportar','DemandaController@exportar');
 Route::get('/addTabela',array('as'=>'addTabela','uses'=>'AjaxController@addTabela'));
 Route::get('/searchajax',array('as'=>'searchajax','uses'=>'AjaxController@autoComplete'));
 Route::get('/atualizaTabelas',array('as'=>'atualizaTabelas','uses'=>'AjaxController@atualizaTabelas'));
+Route::get('/atualizaOwner',array('as'=>'atualizaOwner','uses'=>'AjaxController@atualizaOwner'));
 Route::get('/verificaDemanda',array('as'=>'verificaDemanda','uses'=>'AjaxController@verificaDemanda'));
 Route::get('/verificaFuncionalidade',array('as'=>'verificaFuncionalidade','uses'=>'AjaxController@verificaFuncionalidade'));
 Route::get('/autoCompleteFuncionalidade',array('as'=>'autoCompleteFuncionalidade','uses'=>'AjaxController@autoCompleteFuncionalidade'));

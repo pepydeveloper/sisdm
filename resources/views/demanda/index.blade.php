@@ -77,41 +77,65 @@
 
 </div>
 <div>
-    <div class="panel panel-success">
-        <div class="panel-heading links"><a href="cadastrar"><span class="btn btn-primary glyphicon glyphicon-paste"
-                                                                   aria-hidden="true"> Nova Demanda</a></div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Ação</th>
-                    <th>Demanda</th>
-                    <th>Descrição</th>
-                    <th>Sistema</th>
-                    <th>Tipo</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($demandas as $demanda)
-                <tr>
-                    <td>
-                        <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demid}});" target="_blank"></a>
-                        {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="editar/{{$demanda->demid}}"></a>--}}
-                        <a class="btn btn-warning glyphicon glyphicon-eye-open" href="editar/{{$demanda->demid}}"></a>
-                    </td>
-                    <td>{{$demanda->demnumero}}</td>
-                    <td>{{$demanda->demdescricao}}</td>
-                    <td>{{$demanda->sistema->sisnome}}</td>
-                    <td>{{$demanda->demtipo}}</td>
-                </tr>
-            @endforeach
-            </tbody>
-            <tfoot class="table-active">
-                <tr>
-                    <td colspan="5"> Quantidade: {{count($demandas)}}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+    <form method="GET" enctype="multipart/form-data">
+        <input type="hidden" id="pesquisar" name="pesquisar" value="pesquisar"/>
+{{--        {{ csrf_field() }}--}}
+        <div class="panel panel-success">
+            <div class="panel-heading links"><a href="cadastrar"><span class="btn btn-primary glyphicon glyphicon-paste"
+                                                                       aria-hidden="true"> Nova Demanda</span></a></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        @if(count($demandas))
+                            <th>
+                                    <button type="submit" class="btn btn-success">Filtrar</button>
+                            </th>
+                            <th>
+                                <input type="text" name="demnome" class="form-control" placeholder="Nº Demanda"
+                                       aria-describedby="basic-addon1">
+                            </th>
+                            <th>
+                                <input type="text" name="demdescricao" class="form-control" placeholder="Descrição"
+                                       aria-describedby="basic-addon1">
+                            </th>
+                            <th><select class="form-control" name="sisid" id="sisid">
+                                    @foreach($sistemas as $sistema)
+                                        <option value="{{$sistema->sisid}}">{{$sistema->sisnome}}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th><select class="form-control" name="demtipo">
+                                    <option value="Evolutiva">Evolutiva</option>
+                                    <option value="Nova Funcionalidade">Nova Funcionalidade</option>
+                                    <option value="Sustentação">Sustentação</option>
+                                </select>
+                            </th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($demandas as $demanda)
+                    <tr>
+                        <td>
+                            <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demid}});" target="_blank"></a>
+                            <a class="btn btn-warning glyphicon glyphicon-eye-open" href="editar/{{$demanda->demid}}"></a>
+                            {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="excluir/{{$demanda->demid}}"></a>--}}
+                        </td>
+                        <td>{{$demanda->demnumero}}</td>
+                        <td>{{$demanda->demdescricao}}</td>
+                        <td>{{$demanda->sisnome}}</td>
+                        <td>{{$demanda->demtipo}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+                <tfoot class="table-active">
+                    <tr>
+                        <td colspan="5"> Quantidade: {{count($demandas)}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </form>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

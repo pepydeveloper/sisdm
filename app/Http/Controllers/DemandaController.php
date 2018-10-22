@@ -16,8 +16,33 @@ use Illuminate\Http\Request;
 class DemandaController extends Controller
 {
     public function index(){
-        $listDemandas = Demanda::all();
-        return view('demanda.index', ['demandas' => $listDemandas]);
+
+        if(isset($_REQUEST['pesquisar'])){
+            $listDemandas = DB::table('demanda')
+                ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid');
+            if(isset($_REQUEST['demnumero']) && $_REQUEST['demnumero'] != '')
+                $listDemandas->where('demnumero','=', $_REQUEST['demnumero']);
+            if(isset($_REQUEST['demdescricao']) && $_REQUEST['demdescricao'] != '')
+                $listDemandas->where('demdescricao', 'like', '%'.$_REQUEST['demdescricao'].'%');
+            if(isset($_REQUEST['sisid']) && $_REQUEST['sisid'] != '')
+                $listDemandas->where('sistema.sisid', '=', $_REQUEST['sisid']);
+            if(isset($_REQUEST['demtipo']) && $_REQUEST['demtipo'] != '')
+                $listDemandas->where('demtipo', '=', $_REQUEST['demtipo']);
+
+            $listDemandas->orderBy('sisnome')
+                ->orderBy('demnumero')
+                ->get();
+        }else{
+            $listDemandas = DB::table('demanda')
+                ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
+                ->orderBy('sisnome')
+                ->orderBy('demnumero')
+                ->get();
+        }
+        $sistemas = Sistema::all();
+
+        return view('demanda.index', ['demandas' => $listDemandas,'sistemas' => $sistemas]);
+
     }
 
     public function cadastrar(){
@@ -94,18 +119,23 @@ class DemandaController extends Controller
                     $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
 
 
+                    //Salva os arquivos de evidencias.
+                    if(!is_dir("demandas\dem_{$demid->id}")){
+                        mkdir("demandas\dem_{$demid->id}");
+                    }
+
                     if (isset($funcionalidade['evidencia1'])) {
-                        $funcionalidade['evidencia1']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia1']->getClientOriginalName());
+                        $funcionalidade['evidencia1']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia1']->getClientOriginalName());
                         $funcionalidade['evidencia1'] = $funcionalidade['evidencia1']->getClientOriginalName();
                     }
 
                     if (isset($funcionalidade['evidencia2'])) {
-                        $funcionalidade['evidencia2']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia2']->getClientOriginalName());
+                        $funcionalidade['evidencia2']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia2']->getClientOriginalName());
                         $funcionalidade['evidencia2'] = $funcionalidade['evidencia2']->getClientOriginalName();
                     }
 
                     if (isset($funcionalidade['evidencia3'])) {
-                        $funcionalidade['evidencia3']->storeAs($_REQUEST['demnumero'], $funcionalidade['evidencia3']->getClientOriginalName());
+                        $funcionalidade['evidencia3']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia3']->getClientOriginalName());
                         $funcionalidade['evidencia3'] = $funcionalidade['evidencia3']->getClientOriginalName();
                     }
 
@@ -121,10 +151,14 @@ class DemandaController extends Controller
                 }
             }
 
+            //Monta o XLS documento de metricas
+            $montaExcel = $this->montaExcel($demid->id);
+            file_put_contents("demandas\dem_{$demid->id}\{$montaExcel[nomeDoc]}.xls", $montaExcel['xls']);
+
             //cria o zip para download
             $zipper = new \Chumper\Zipper\Zipper;
-            $files = glob(public_path('demandas/'.$demid->id.'/*'));
-            $zipper->make('demandas/'. $demid->id.'.zip')->add($files);
+            $files = glob(public_path('demandas/dem_'.$demid->id.'/*'));
+            $zipper->make('demandas/dem_'. $demid->id.'/dem_'. $demid->id.'.zip')->add($files);
 
             DB::commit();
             return redirect('/');
@@ -136,14 +170,7 @@ class DemandaController extends Controller
     }
 
     public function exportar(){
-
-        return response()->download(public_path('demandas/'.$_REQUEST['demid'].'/'.$_REQUEST['demid'].'.zip'));
-
-//        $montaExcel = $this->montaExcel($_REQUEST['demid']);
-//        header('Content-Type: application/vnd.ms-excel; charset=utf-8"');
-//        header('Content-disposition: attachment; filename='.$montaExcel['nomeDoc'].'.xls');
-//        file_put_contents('demandas\\' . $montaExcel['nomeDoc'].'.xls', $montaExcel['xls']);
-//        echo utf8_decode($montaExcel['xls']);
+        return response()->download(public_path('demandas/dem_'.$_REQUEST['demid'].'/dem_'.$_REQUEST['demid'].'.zip'));
     }
 
     public function montaExcel($demid){

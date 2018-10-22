@@ -71,7 +71,7 @@
             <input type="number" class="form-control" name="demnumero" id="demnumero"
                    placeholder="Demanda" size="60" onblur="verificaDemanda()">
             <span class="input-group-addon" id="basic-addon1">Sistema</span>
-            <select class="form-control" name="sisid">
+            <select class="form-control" name="sisid" id="sisid">
                 @foreach($sistemas as $sistema)
                     <option value="{{$sistema->sisid}}">{{$sistema->sisnome}}</option>
                 @endforeach
@@ -209,7 +209,7 @@
                 dataType: "json",
                 type: "get",
                 data: {
-                    funnome:  $("#funnome_"+funcionalidade).val()
+                    funnome:  $("#funnome_"+funcionalidade).val(), sisid: sisid.val()
                 },
                 success: function (data) {
                     $("#funnome_"+funcionalidade).autocomplete({
@@ -342,12 +342,8 @@
             cols += '<td><select class="form-control" id="tabowner_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabwoner]" ';
             cols += 'onchange="buscaTabelas(' + idfunc + ',' + nrTabela + ')">';
             cols += '<option value="0">Selecione o Owner.. </option>';
-            @foreach($owners as $owner)
-                cols += '<option value="{{$owner[0]->tabowner}}">{{$owner[0]->tabowner}}</option>';
-            @endforeach
-                cols += '</select></td>';
+            cols += '</select></td>';
             cols += '<td><select class="form-control" id="tabnome_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" ';
-            cols += 'onfocus="buscaTabelas(' + idfunc + ',' + nrTabela + ')">';
             cols += '<option value="0">Selecione a tabela.. </option>';
             cols += '</select></td>';
             cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
@@ -359,6 +355,7 @@
                 '    </select></td>';
             newRow.append(cols);
             $("#tabela_funcionalidades_" + idfunc).append(newRow);
+            buscaOwners(idfunc,nrTabela);
             nrTabela++;
             $('#qtdtabelas_' + idfunc).val(nrTabela);
             return false;
@@ -408,28 +405,56 @@
             });
         }
 
-        buscaTabelas = function (funcionalidade, tabela) {
-            var owner = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').text();
-            src = "{{ route('atualizaTabelas') }}";
+        buscaOwners = function (funcionalidade, tabela) {
+            $('#tabowner_' + funcionalidade + '_' + tabela + '').html('<option value="">Buscando...</option>');
+            src = "{{ route('atualizaOwner') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
                 type: "get",
-                data: {
-                    tabowner: owner
-                },
                 success: function (dados) {
                     if (dados.length > 0) {
-                        var option = '<option>Selecione a Tabela.. </option>';
+                        var option = '<option>Selecione o Owner.. </option>';
                         $.each(dados, function (i, obj) {
-                            option += '<option value="' + obj.tabid + '">' + obj.tabnome + '</option>';
+                            option += '<option value="' + obj.tabowner + '">' + obj.tabowner + '</option>';
                         })
                     } else {
                         Reset();
                     }
-                    $('#tabnome_' + funcionalidade + '_' + tabela + '').html(option).show();
+                    $('#tabowner_' + funcionalidade + '_' + tabela + '').html(option).show();
+                    $('#tabnome_' + funcionalidade + '_' + tabela + '').html('')
                 }
             });
+        }
+
+        buscaTabelas = function (funcionalidade, tabela) {
+            $('#tabnome_' + funcionalidade + '_' + tabela + '').html('<option value="">Buscando...</option>');
+            var val = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').val();
+            if(val == 0) {
+                alert('Selecione um Owner');
+            }else{
+                var owner = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').text();
+                src = "{{ route('atualizaTabelas') }}";
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        tabowner: owner
+                    },
+                    success: function (dados) {
+                        if (dados.length > 0) {
+                            var option = '<option>Selecione a Tabela.. </option>';
+                            $.each(dados, function (i, obj) {
+                                option += '<option value="' + obj.tabid + '">' + obj.tabnome + '</option>';
+                            })
+                        } else {
+                            Reset();
+                        }
+                        $('#tabnome_' + funcionalidade + '_' + tabela + '').html(option).show();
+                    }
+                });
+            }
         }
 
         verificaDemanda = function () {

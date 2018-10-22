@@ -20,6 +20,17 @@ class AjaxController extends Controller
             return json_encode($data);
     }
 
+    public function atualizaOwner() {
+        $owners = Tabelas::all()->sortBy("tabowner")->groupBy('tabowner');
+
+        $data=array();
+        foreach ($owners as $owner) {
+            $data[]=array('tabowner'=>$owner[0]->tabowner);
+        }
+        if(count($data))
+            return json_encode($data);
+    }
+
     public function addTabela(){
         $_REQUEST['tabnome'] = strtoupper($_REQUEST['tabnome']);
         $_REQUEST['tabowner'] = strtoupper($_REQUEST['tabowner']);
@@ -59,6 +70,7 @@ class AjaxController extends Controller
     public function autoCompleteFuncionalidade() {
         $funcionalidades = DB::table('funcionalidade')->select('funnome')
             ->where('funnome', 'like', '%'.$_REQUEST['funnome'].'%')
+            ->where('sisid','=',$_REQUEST['sisid'])
             ->get();
 
         $data=array();
