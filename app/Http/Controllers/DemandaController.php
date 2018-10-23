@@ -18,7 +18,7 @@ class DemandaController extends Controller
     public function index(){
 
 
-        if($_REQUEST['demnumero'] != '' && !isset($_REQUEST['todos'])){
+        if(isset($_REQUEST['demnumero'])&& !isset($_REQUEST['todos'])){
             $listDemandas = Demanda::all()
                 ->where('demnumero','=', $_REQUEST['demnumero']);
         }else{
@@ -79,8 +79,10 @@ class DemandaController extends Controller
     {
         DB::beginTransaction();
         try {
+            $encoding = mb_internal_encoding();
+
             //Salva a demanda
-            $_REQUEST['demdescricao'] = strtoupper($_REQUEST['demdescricao']);
+            $_REQUEST['demdescricao'] = mb_strtoupper($_REQUEST['demdescricao'], $encoding);
             $demid = Demanda::create($_REQUEST);
             $demnumero = $_REQUEST['demnumero'];
 
@@ -92,7 +94,7 @@ class DemandaController extends Controller
             //Salva os tipos de atendimento
             foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
                 if ($atendimento['ocorrido'] == 'S') {
-                    $dat['datdescricao'] = strtoupper($atendimento['descricao']);
+                    $dat['datdescricao'] = mb_strtoupper($atendimento['descricao'], $encoding);
                     $dat['datquantidade'] = $atendimento['quantidade'];
                     $dat['ateid'] = $ateid;
                     $dat['demid'] = $demid->id;
@@ -105,13 +107,13 @@ class DemandaController extends Controller
                 foreach ($request->funcionalidade as $nrFunc => $funcionalidade) {
                     $funcionalidade['sisid'] = $_REQUEST['sisid'];
                     $funcionalidade['demid'] = $demid->id;
-                    $funcionalidade['funnome'] = strtoupper($funcionalidade['funnome']);
+                    $funcionalidade['funnome'] = mb_strtoupper($funcionalidade['funnome'], $encoding);
                     $funid = Funcionalidade::create($funcionalidade);
 
                     $funcionalidade['funid'] = $funid->id;
-                    $funcionalidade['defdescricao'] = strtoupper($funcionalidade['defdescricao']);
-                    $funcionalidade['defalteracaoarquivos'] = strtoupper($funcionalidade['defalteracaoarquivos']);
-                    $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
+                    $funcionalidade['defdescricao'] = mb_strtoupper($funcionalidade['defdescricao'], $encoding);
+                    $funcionalidade['defalteracaoarquivos'] = mb_strtoupper($funcionalidade['defalteracaoarquivos'], $encoding);
+                    $funcionalidade['defcargadados'] = mb_strtoupper($funcionalidade['defcargadados'], $encoding);
 
                     if (isset($funcionalidade['evidencia1'])) {
                         $funcionalidade['evidencia1']->storeAs("dem_{$demnumero}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia1']->getClientOriginalName());
