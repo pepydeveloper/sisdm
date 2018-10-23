@@ -17,21 +17,10 @@ class DemandaController extends Controller
 {
     public function index(){
 
-        if(isset($_REQUEST['pesquisar'])){
-            $listDemandas = DB::table('demanda')
-                ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid');
-            if(isset($_REQUEST['demnumero']) && $_REQUEST['demnumero'] != '')
-                $listDemandas->where('demnumero','=', $_REQUEST['demnumero']);
-            if(isset($_REQUEST['demdescricao']) && $_REQUEST['demdescricao'] != '')
-                $listDemandas->where('demdescricao', 'like', '%'.$_REQUEST['demdescricao'].'%');
-            if(isset($_REQUEST['sisid']) && $_REQUEST['sisid'] != '')
-                $listDemandas->where('sistema.sisid', '=', $_REQUEST['sisid']);
-            if(isset($_REQUEST['demtipo']) && $_REQUEST['demtipo'] != '')
-                $listDemandas->where('demtipo', '=', $_REQUEST['demtipo']);
 
-            $listDemandas->orderBy('sisnome')
-                ->orderBy('demnumero')
-                ->get();
+        if($_REQUEST['demnumero'] != '' && !isset($_REQUEST['todos'])){
+            $listDemandas = Demanda::all()
+                ->where('demnumero','=', $_REQUEST['demnumero']);
         }else{
             $listDemandas = DB::table('demanda')
                 ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
@@ -194,11 +183,11 @@ class DemandaController extends Controller
 
         $xls = "";
         $xls .= "<table border='1'>";
-        $xls .= "<tr style='font-size: 25px; background-color: #3ce5b2;'>";
+        $xls .= "<tr style='font-size: 25px;'>";
         $xls .= "<th>#{$demanda[0]->demnumero}</th>";
         $xls .= "<th colspan='4'>Informações de Sustentação</th>";
         $xls .= "</tr>";
-        $xls .= "<tr style='background-color: #a3e5bb;'>";
+        $xls .= "<tr>";
         $xls .= "<th>O que foi feito para atender a demanda?</th>";
         $xls .= "<th>Sim</th>";
         $xls .= "<th>Não</th>";
@@ -206,7 +195,7 @@ class DemandaController extends Controller
         $xls .= "<th>Descrição da Solução</th>";
         $xls .= "</tr>";
         foreach($todosAtendimentos as $id => $atendimento){
-            $zebra = ($id % 2 == 0) ? 'style="background-color: #C4E5DA;"' : '';
+            $zebra = ($id % 2 == 0) ? 'style="background-color: #dcf5f6;"' : '';
             $xls .= "<tr $zebra>";
             $xls .= "<td>$atendimento->atedescricao</td>";
             $imprime = true;
@@ -216,7 +205,7 @@ class DemandaController extends Controller
                     $xls .= "<td><center>X</center></td>";
                     $xls .= "<td></td>";
                     $xls .= "<td><center>$ateDemanda->datquantidade</center></td>";
-                    $xls .= "<td>$ateDemanda->datdescricao</td>";
+                    $xls .= "<td style='text-align: left'>$ateDemanda->datdescricao</td>";
                 }
             }
             if($imprime){
@@ -232,10 +221,10 @@ class DemandaController extends Controller
         $xls .= "<br>";
 
         $xls .= "<table border='1'>";
-        $xls .= "<tr style='font-size: 25px; background-color: #3ce5b2;'>";
+        $xls .= "<tr style='font-size: 25px;'>";
         $xls .= "<th colspan='9'>Informações Necessárias para Contagem</th>";
         $xls .= "</tr>";
-        $xls .= "<tr style='background-color: #a3e5bb;'>";
+        $xls .= "<tr>";
         $xls .= "<th rowspan='2' >#</th>";
         $xls .= "<th rowspan='2'>Funcionalidades<br>Impactadas</th>";
         $xls .= "<th rowspan='2'>Descrição da<br>Manutenção</th>";
@@ -244,13 +233,13 @@ class DemandaController extends Controller
         $xls .= "<th rowspan='2'>Alteração em <br>arquivos ou tabelas</th>";
         $xls .= "<th rowspan='2'>Carga de<br>Dados</th>";
         $xls .= "</tr>";
-        $xls .= "<tr style='background-color: #a3e5bb;'>";
+        $xls .= "<tr>";
         $xls .= "<th>Nome da Tabela</th>";
         $xls .= "<th>Já era Utilizada</th>";
         $xls .= "<th>tipo de Acesso</th>";
         $xls .= "</tr>";
         foreach($funcionaliaddes as $qtd => $funcionalidade){
-            $zebra = ($qtd % 2 == 0) ? 'style="background-color: #C4E5DA;"' : '';
+            $zebra = ($qtd % 2 == 0) ? 'style="background-color: #dcf5f6;"' : '';
             $tabelas = DB::table('tabelas')
                 ->leftjoin('funcionalidade_tabelas', 'funcionalidade_tabelas.tabid' ,'=','tabelas.tabid')
                 ->where('funcionalidade_tabelas.funid','=', $funcionalidade->funid )

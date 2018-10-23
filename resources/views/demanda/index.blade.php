@@ -79,37 +79,27 @@
 <div>
     <form method="GET" enctype="multipart/form-data">
         <input type="hidden" id="pesquisar" name="pesquisar" value="pesquisar"/>
-{{--        {{ csrf_field() }}--}}
+        {{ csrf_field() }}
         <div class="panel panel-success">
-            <div class="panel-heading links"><a href="cadastrar"><span class="btn btn-primary glyphicon glyphicon-paste"
-                                                                       aria-hidden="true"> Nova Demanda</span></a></div>
+            <div class="panel-heading links"><a href="cadastrar">
+                    <span class="btn btn-primary glyphicon glyphicon-paste"
+                     aria-hidden="true"> Nova Demanda</span></a>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         @if(count($demandas))
                             <th>
+                                    <button type="submit" class="btn btn-danger" name="todos">Todos</button>
                                     <button type="submit" class="btn btn-success">Filtrar</button>
                             </th>
                             <th>
-                                <input type="text" name="demnome" class="form-control" placeholder="Nº Demanda"
+                                <input type="text" name="demnumero" class="form-control" placeholder="Nº Demanda"
                                        aria-describedby="basic-addon1">
                             </th>
-                            <th>
-                                <input type="text" name="demdescricao" class="form-control" placeholder="Descrição"
-                                       aria-describedby="basic-addon1">
-                            </th>
-                            <th><select class="form-control" name="sisid" id="sisid">
-                                    @foreach($sistemas as $sistema)
-                                        <option value="{{$sistema->sisid}}">{{$sistema->sisnome}}</option>
-                                    @endforeach
-                                </select>
-                            </th>
-                            <th><select class="form-control" name="demtipo">
-                                    <option value="Evolutiva">Evolutiva</option>
-                                    <option value="Nova Funcionalidade">Nova Funcionalidade</option>
-                                    <option value="Sustentação">Sustentação</option>
-                                </select>
-                            </th>
+                            <th>Descrição</th>
+                            <th>Sistema</th>
+                            <th>Tipo</th>
                         @endif
                     </tr>
                 </thead>
@@ -117,7 +107,7 @@
                 @foreach($demandas as $demanda)
                     <tr>
                         <td>
-                            <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demid}});" target="_blank"></a>
+                            <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demnumero}});" target="_blank"></a>
                             <a class="btn btn-warning glyphicon glyphicon-eye-open" href="editar/{{$demanda->demid}}"></a>
                             {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="excluir/{{$demanda->demid}}"></a>--}}
                         </td>
