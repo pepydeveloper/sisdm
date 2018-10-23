@@ -93,6 +93,12 @@ class DemandaController extends Controller
             //Salva a demanda
             $_REQUEST['demdescricao'] = strtoupper($_REQUEST['demdescricao']);
             $demid = Demanda::create($_REQUEST);
+            $demnumero = $_REQUEST['demnumero'];
+
+            //Salva os arquivos de evidencias.
+            if(!is_dir("demandas\dem_{$demnumero}")){
+                mkdir("demandas\dem_{$demnumero}");
+            }
 
             //Salva os tipos de atendimento
             foreach ($_REQUEST['atendimento'] as $ateid => $atendimento) {
@@ -118,24 +124,16 @@ class DemandaController extends Controller
                     $funcionalidade['defalteracaoarquivos'] = strtoupper($funcionalidade['defalteracaoarquivos']);
                     $funcionalidade['defcargadados'] = strtoupper($funcionalidade['defcargadados']);
 
-
-                    //Salva os arquivos de evidencias.
-                    if(!is_dir("demandas\dem_{$demid->id}")){
-                        mkdir("demandas\dem_{$demid->id}");
-                    }
-
                     if (isset($funcionalidade['evidencia1'])) {
-                        $funcionalidade['evidencia1']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia1']->getClientOriginalName());
+                        $funcionalidade['evidencia1']->storeAs("dem_{$demnumero}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia1']->getClientOriginalName());
                         $funcionalidade['evidencia1'] = $funcionalidade['evidencia1']->getClientOriginalName();
                     }
-
                     if (isset($funcionalidade['evidencia2'])) {
-                        $funcionalidade['evidencia2']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia2']->getClientOriginalName());
+                        $funcionalidade['evidencia2']->storeAs("dem_{$demnumero}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia2']->getClientOriginalName());
                         $funcionalidade['evidencia2'] = $funcionalidade['evidencia2']->getClientOriginalName();
                     }
-
                     if (isset($funcionalidade['evidencia3'])) {
-                        $funcionalidade['evidencia3']->storeAs("dem_{$demid->id}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia3']->getClientOriginalName());
+                        $funcionalidade['evidencia3']->storeAs("dem_{$demnumero}", $funcionalidade['funnome'].'_'.$funcionalidade['evidencia3']->getClientOriginalName());
                         $funcionalidade['evidencia3'] = $funcionalidade['evidencia3']->getClientOriginalName();
                     }
 
@@ -153,12 +151,12 @@ class DemandaController extends Controller
 
             //Monta o XLS documento de metricas
             $montaExcel = $this->montaExcel($demid->id);
-            file_put_contents("demandas\dem_{$demid->id}\{$montaExcel[nomeDoc]}.xls", $montaExcel['xls']);
+            file_put_contents("demandas\dem_{$demnumero}\\$montaExcel[nomeDoc].xls", $montaExcel['xls']);
 
             //cria o zip para download
             $zipper = new \Chumper\Zipper\Zipper;
-            $files = glob(public_path('demandas/dem_'.$demid->id.'/*'));
-            $zipper->make('demandas/dem_'. $demid->id.'/dem_'. $demid->id.'.zip')->add($files);
+            $files = glob(public_path('demandas/dem_'.$demnumero.'/*'));
+            $zipper->make('demandas/dem_'. $demnumero.'/dem_'. $demnumero.'.zip')->add($files);
 
             DB::commit();
             return redirect('/');

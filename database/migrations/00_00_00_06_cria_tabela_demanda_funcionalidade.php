@@ -15,13 +15,13 @@ class CriaTabelaDemandaFuncionalidade extends Migration
     {
         Schema::create('demanda_funcionalidade', function (Blueprint $table) {
             $table->increments('defid');
-            $table->char('deftipomudanca');
-            $table->text('defdescricao');
-            $table->text('defalteracaoarquivos');
-            $table->text('defcargadados');
-            $table->string('evidencia1');
-            $table->string('evidencia2');
-            $table->string('evidencia3');
+            $table->char('deftipomudanca')->nullable();
+            $table->text('defdescricao')->nullable();
+            $table->text('defalteracaoarquivos')->nullable();
+            $table->text('defcargadados')->nullable();
+            $table->string('evidencia1')->nullable();
+            $table->string('evidencia2')->nullable();
+            $table->string('evidencia3')->nullable();
             $table->integer('demid')->unsigned();
             $table->integer('funid')->unsigned();
             $table->foreign('demid')->references('demid')->on('demanda');
