@@ -112,29 +112,36 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">O que foi feito na demanda?</th>
-                    <th scope="col">Sim</th>
-                    <th scope="col">Não</th>
-                    <th scope="col">Quantidade</th>
-                    <th scope="col">Descrição</th>
+                    <th scope="col" style="text-align:center;">O que foi feito na demanda?</th>
+                    <th scope="col" style="text-align:center;">Alterações</th>
+                    <th scope="col" style="text-align:center;">Quantidade</th>
+                    <th scope="col" style="text-align:center;">Descrição</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($atendimentos as $atendimento)
                     <tr>
-                        <th scope="row" width="30%">{{ $atendimento->atedescricao }}</th>
-                        <td><input type="radio" name="atendimento[{{ $atendimento->ateid }}][ocorrido]" value="S"
-                                   onchange="liberaCampos('s',{{ $atendimento->ateid }})"></td>
-                        <td><input type="radio" name="atendimento[{{ $atendimento->ateid }}][ocorrido]" value="N"
-                                   onchange="liberaCampos('n',{{ $atendimento->ateid }})" checked></td>
-                        <td width="5%"><input type="number" disabled class="form-control" placeholder="QTD"
+                        <th scope="row" width="30%">
+                            {{ $atendimento->atedescricao }}
+                        </th>
+                        <td  style="text-align:center;">
+                            <input type="radio" name="atendimento[{{ $atendimento->ateid }}][ocorrido]" value="S"
+                                   onchange="liberaCampos('s',{{ $atendimento->ateid }})">Sim &nbsp;&nbsp;
+                            <input type="radio" name="atendimento[{{ $atendimento->ateid }}][ocorrido]" value="N"
+                                   onchange="liberaCampos('n',{{ $atendimento->ateid }})" checked> Não
+                        </td>
+                        <td width="5%" >
+                            <input type="number" disabled class="form-control" placeholder="QTD"
                                               name="atendimento[{{ $atendimento->ateid }}][quantidade]"
                                               id="quantidade_{{ $atendimento->ateid }}" aria-describedby="basic-addon1"
-                                              size="8"></td>
-                        <td><input type="text" disabled class="form-control" placeholder="Descrição"
+                                              size="8">
+                        </td>
+                        <td>
+                            <input type="text" disabled class="form-control" placeholder="Descrição"
                                    name="atendimento[{{ $atendimento->ateid }}][descricao]"
                                    id="descricao_{{ $atendimento->ateid }}"
-                                   aria-describedby="basic-addon1"></td>
+                                   aria-describedby="basic-addon1">
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -270,12 +277,12 @@
                 func += '<br>';
                 func += '<table id="tabela_funcionalidades_' + idfunc + '" class="table table-striped">';
                 func += '<tbody>';
-                func += '<tr>';
+                func += '<tr >';
                 func += '<th width="10%"></th>';
-                func += '<th width="20%">Owner</th>';
-                func += '<th width="50%">Tabela</th>';
-                func += '<th width="10%">Já era Utilizada</th>';
-                func += '<th width="10%">Tipo de Acesso</th>';
+                func += '<th width="20%" style="text-align:center;">Owner</th>';
+                func += '<th width="50%" style="text-align:center;">Tabela</th>';
+                func += '<th width="10%" style="text-align:center;">Já era Utilizada</th>';
+                func += '<th width="10%" style="text-align:center;">Tipo de Acesso</th>';
                 func += '</tr>';
                 func += '</tbody>';
                 func += '</table>';
@@ -301,7 +308,7 @@
             cols += '<td><select class="form-control" id="tabnome_' + idfunc + '_' + nrTabela + '" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" ';
             cols += '<option value="0">Selecione a tabela.. </option>';
             cols += '</select></td>';
-            cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
+            cols += '<td style="text-align:center;"><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S" >Sim &nbsp;&nbsp; ' +
                 '<input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="N" checked>Não</td>';
             cols += '<td><select class="form-control" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]">\n' +
                 '        <option value="Escrita">Escrita</option>\n' +
@@ -513,8 +520,8 @@
                             cols += '<td><center>';
                             cols += '<button type="button" onclick="removeRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
                             cols += '</center></td>';
-                            cols += '<td><input type="text" name="tabowner" id="tabowner" value="' + obj.tabowner + '" disabled></td>';
-                            cols += '<td><input type="text" name="tabnome" id="tabnome" value="' + obj.tabnome + '" disabled></td>';
+                            cols += '<td><input type="text" name="tabowner" id="tabowner" value="' + obj.tabowner + '" disabled size=""></td>';
+                            cols += '<td><input type="text" name="tabnome" id="tabnome" value="' + obj.tabnome + '" disabled size="80"></td>';
                             cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S"  disabled ';
                             if (obj.tafutilizada == 'S') {
                                 cols += ' checked="checked" ';
