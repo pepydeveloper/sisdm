@@ -83,32 +83,34 @@
         <div class="panel panel-success">
             <div class="panel-heading links"><a href="cadastrar">
                     <span class="btn btn-primary glyphicon glyphicon-paste"
-                     aria-hidden="true"> Nova Demanda</span></a>
+                          aria-hidden="true"> Nova Demanda</span></a>
             </div>
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        @if(count($demandas))
-                            <th>
-                                    <button type="submit" class="btn btn-danger" name="todos">Todos</button>
-                                    <button type="submit" class="btn btn-success">Filtrar</button>
-                            </th>
-                            <th>
-                                <input type="text" name="demnumero" class="form-control" placeholder="Nº Demanda"
-                                       aria-describedby="basic-addon1">
-                            </th>
-                            <th>Descrição</th>
-                            <th>Sistema</th>
-                            <th>Tipo</th>
-                        @endif
-                    </tr>
+                <tr>
+                    @if(count($demandas))
+                        <th>
+                            <button type="submit" class="btn btn-danger" name="todos">Limpar</button>
+                            <button type="submit" class="btn btn-success">Filtrar</button>
+                        </th>
+                        <th>
+                            <input type="text" name="demnumero" class="form-control" placeholder="Nº Demanda"
+                                   aria-describedby="basic-addon1">
+                        </th>
+                        <th>Descrição</th>
+                        <th>Sistema</th>
+                        <th>Tipo</th>
+                    @endif
+                </tr>
                 </thead>
                 <tbody>
                 @foreach($demandas as $demanda)
                     <tr>
                         <td>
-                            <a class="btn btn-success glyphicon glyphicon-download-alt" href="javascript:exportarXls({{$demanda->demnumero}});" target="_blank"></a>
-                            <a class="btn btn-warning glyphicon glyphicon-eye-open" href="editar/{{$demanda->demid}}"></a>
+                            <a class="btn btn-success glyphicon glyphicon-download-alt"
+                               href="javascript:exportarXls({{$demanda->demnumero}});" target="_blank"></a>
+                            <a class="btn btn-warning glyphicon glyphicon-eye-open"
+                               href="editar/{{$demanda->demid}}"></a>
                             {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="excluir/{{$demanda->demid}}"></a>--}}
                         </td>
                         <td>{{$demanda->demnumero}}</td>
@@ -119,9 +121,9 @@
                 @endforeach
                 </tbody>
                 <tfoot class="table-active">
-                    <tr>
-                        <td colspan="5"> Quantidade: {{count($demandas)}}</td>
-                    </tr>
+                <tr>
+                    <td colspan="5"> Quantidade: {{count($demandas)}}</td>
+                </tr>
                 </tfoot>
             </table>
         </div>
@@ -136,8 +138,8 @@
 </html>
 <script>
     (function ($) {
-        exportarXls = function(demid) {
-            window.open('/exportar?demid='+demid, '_blank');
+        exportarXls = function (demid) {
+            window.open('/exportar?demid=' + demid, '_blank');
         };
     })(jQuery);
 </script>

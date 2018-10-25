@@ -58,10 +58,19 @@ class AjaxController extends Controller
     }
 
     public function verificaFuncionalidade(){
-        $demanda = Funcionalidade::all()->where('funnome','=', $_REQUEST['funnome'])->first();
 
-        if(!is_null($demanda)){
-            return json_encode(true);
+        $funcionalidade = DB::table('funcionalidade')
+            ->where('funnome', 'like', '%'.$_REQUEST['funnome'].'%')
+            ->where('sisid','=',$_REQUEST['sisid'])
+            ->get()->sortByDesc('funid')->first();
+
+        $tabelas = DB::table('tabelas')
+            ->join('funcionalidade_tabelas', 'funcionalidade_tabelas.tabid', '=', 'tabelas.tabid')
+            ->where('funcionalidade_tabelas.funid', '=', $funcionalidade->funid)
+            ->get()->sortByDesc('tafid');
+
+        if(!is_null($tabelas)){
+            return json_encode($tabelas);
         }else{
             return json_encode(false);
         }
@@ -71,6 +80,7 @@ class AjaxController extends Controller
         $funcionalidades = DB::table('funcionalidade')->select('funnome')
             ->where('funnome', 'like', '%'.$_REQUEST['funnome'].'%')
             ->where('sisid','=',$_REQUEST['sisid'])
+            ->groupBy('funnome')
             ->get();
 
         $data=array();
@@ -83,7 +93,9 @@ class AjaxController extends Controller
     public function autoCompleteOwner() {
         $owners = DB::table('tabelas')->select('tabowner')
             ->where('tabowner', 'like', '%'.$_REQUEST['tabowner'].'%')
-            ->get()->sortBy('tabowner');
+            ->groupBy('tabowner')
+            ->sortBy('tabowner')
+            ->get();
 
         $data=array();
         foreach ($owners as $owner) {
@@ -95,7 +107,9 @@ class AjaxController extends Controller
     public function autoCompleteTabela() {
         $tabelas = DB::table('tabelas')->select('tabnome')
             ->where('tabnome', 'like', '%'.$_REQUEST['tabnome'].'%')
-            ->get()->sortBy('tabnome');
+            ->sortBy('tabnome')
+            ->groupBy('tabnome')
+            ->get();
 
         $data=array();
         foreach ($tabelas as $tabela) {

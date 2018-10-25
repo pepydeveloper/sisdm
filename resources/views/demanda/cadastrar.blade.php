@@ -5,7 +5,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <meta charset="utf-8">
 </head>
 <style>
@@ -53,7 +53,12 @@
     .m-b-md {
         margin-bottom: 30px;
     }
-    .ui-autocomplete { position: absolute; cursor: default;z-index:1600 !important;}
+
+    .ui-autocomplete {
+        position: absolute;
+        cursor: default;
+        z-index: 1600 !important;
+    }
 </style>
 <body>
 <div class="flex-center position-ref">
@@ -92,9 +97,9 @@
                 <option value="Sustentação">Sustentação</option>
             </select>
             <span class="input-group-addon" id="basic-addon1">Data Início</span>
-            <input type="date" name="demdatainicio" id="demdatainicio" class="form-control" >
+            <input type="date" name="demdatainicio" id="demdatainicio" class="form-control">
             <span class="input-group-addon" id="basic-addon1">Data Finalização</span>
-            <input type="date" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control" >
+            <input type="date" name="demdatafinalizacao" id="demdatafinalizacao" class="form-control">
         </div>
         <br>
 
@@ -154,7 +159,8 @@
             </button>
             <button style="margin-top: 5px; float: right" class="btn btn-primary">Salvar</button>
         </div>
-        <div class="modal fade pac-container" id="modalCadastroTabela" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade pac-container" id="modalCadastroTabela" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -170,17 +176,21 @@
                         <form>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Owner:</label>
-                                <input type="text" class="form-control" id="tabowner" name="tabowner" id="tabowner" onkeyup="autoCompleteOwner();">
+                                <input type="text" class="form-control" id="tabowner" name="tabowner" id="tabowner"
+                                       onkeyup="autoCompleteOwner();">
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Tabela:</label>
-                                <input type="text" class="form-control" id="tabnome" name="tabnome" id="tabnome" onkeyup="autoCompleteTabela();">
+                                <input type="text" class="form-control" id="tabnome" name="tabnome" id="tabnome"
+                                       onkeyup="autoCompleteTabela();">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
-                        <button type="button" class="btn btn-primary" onclick="cadastrarTabela()" data-dismiss="modal">Cadastrar</button>
+                        <button type="button" class="btn btn-primary" onclick="cadastrarTabela()" data-dismiss="modal">
+                            Cadastrar
+                        </button>
                     </div>
                 </div>
 
@@ -202,61 +212,6 @@
 
 <script>
     (function ($) {
-        autoCompleteFuncionalidade = function(funcionalidade) {
-            src = "{{ route('autoCompleteFuncionalidade') }}";
-            $.ajax({
-                url: src,
-                dataType: "json",
-                type: "get",
-                data: {
-                    funnome:  $("#funnome_"+funcionalidade).val(), sisid: sisid.val()
-                },
-                success: function (data) {
-                    $("#funnome_"+funcionalidade).autocomplete({
-                        source: data
-                    });
-                }
-            });
-        };
-
-        autoCompleteOwner = function() {
-            if($('#tabowner').val().length > 3){
-                src = "{{ route('autoCompleteOwner') }}";
-                $.ajax({
-                    url: src,
-                    dataType: "json",
-                    type: "get",
-                    data: {
-                        tabowner:  $('#tabowner').val()
-                    },
-                    success: function (data) {
-                        $("#tabowner").autocomplete({
-                            source: data
-                        });
-                    }
-                });
-            }
-        };
-
-        autoCompleteTabela = function() {
-            if($('#tabnome').val().length > 3){
-                src = "{{ route('autoCompleteTabela') }}";
-                $.ajax({
-                    url: src,
-                    dataType: "json",
-                    type: "get",
-                    data: {
-                        tabnome:  $('#tabnome').val()
-                    },
-                    success: function (data) {
-                        $("#tabnome").autocomplete({
-                            source: data
-                        });
-                    }
-                });
-            }
-        };
-
         addFuncionalidade = function () {
             if ($('#sisid').val() == 0) {
                 $('#sisid').focus();
@@ -274,8 +229,8 @@
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Funcionalidade</span>';
                 func += '<input type="text" class="form-control" name="funcionalidade[' + idfunc + '][funnome]"';
-                func += 'placeholder="Nome da Funcionalidade" id="funnome_'+idfunc+'" size="60" ';
-                func += 'onkeyup="autoCompleteFuncionalidade('+idfunc+');" onblur="verificaFuncionalidade(this)">';
+                func += 'placeholder="Nome da Funcionalidade" id="funnome_' + idfunc + '" size="60" ';
+                func += 'onkeyup="autoCompleteFuncionalidade(' + idfunc + ');" onblur="verificaFuncionalidade(this,' + idfunc + ')">';
                 func += '<span class="input-group-addon">Tipo de Mudança</span>';
                 func += '<select class="form-control" name="funcionalidade[' + idfunc + '][deftipomudanca]">';
                 func += '<option value="Alterada">Alterada</option>';
@@ -286,7 +241,7 @@
                 func += '<br>';
                 func += '<div class="input-group">';
                 func += '<span class="input-group-addon">Descrição da Manutenção</span>';
-                func += '<textarea class="form-control" placeholder="Descrição detalhada da manutenção" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]"></textarea>';
+                func += '<textarea class="form-control" placeholder="Descrição detalhada da manutenção" aria-label="With textarea" name="funcionalidade[' + idfunc + '][defdescricao]" id="defdescricao"></textarea>';
                 func += '</div>';
                 func += '<br>';
                 func += '<div class="input-group">';
@@ -355,11 +310,23 @@
                 '    </select></td>';
             newRow.append(cols);
             $("#tabela_funcionalidades_" + idfunc).append(newRow);
-            buscaOwners(idfunc,nrTabela);
+            buscaOwners(idfunc, nrTabela);
             nrTabela++;
             $('#qtdtabelas_' + idfunc).val(nrTabela);
             return false;
         };
+
+        liberaCampos = function (liberar, id) {
+            if (liberar == 's') {
+                $('#descricao_' + id).prop('disabled', false);
+                $('#quantidade_' + id).prop('disabled', false);
+            } else {
+                $('#descricao_' + id).val('');
+                $('#descricao_' + id).prop('disabled', true);
+                $('#quantidade_' + id).val('');
+                $('#quantidade_' + id).prop('disabled', true);
+            }
+        }
 
         removeFuncionalidade = function (idfunc) {
             $("div").remove("#funcionaldades_" + idfunc);
@@ -374,17 +341,60 @@
             return false;
         }
 
-        liberaCampos = function (liberar, id) {
-            if (liberar == 's') {
-                $('#descricao_' + id).prop('disabled', false);
-                $('#quantidade_' + id).prop('disabled', false);
-            } else {
-                $('#descricao_' + id).val('');
-                $('#descricao_' + id).prop('disabled', true);
-                $('#quantidade_' + id).val('');
-                $('#quantidade_' + id).prop('disabled', true);
+        autoCompleteFuncionalidade = function (funcionalidade) {
+            src = "{{ route('autoCompleteFuncionalidade') }}";
+            $.ajax({
+                url: src,
+                dataType: "json",
+                type: "get",
+                data: {
+                    funnome: $("#funnome_" + funcionalidade).val(), sisid: $("#sisid").val()
+                },
+                success: function (data) {
+                    $("#funnome_" + funcionalidade).autocomplete({
+                        source: data
+                    });
+                }
+            });
+        };
+
+        autoCompleteOwner = function () {
+            if ($('#tabowner').val().length > 3) {
+                src = "{{ route('autoCompleteOwner') }}";
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        tabowner: $('#tabowner').val()
+                    },
+                    success: function (data) {
+                        $("#tabowner").autocomplete({
+                            source: data
+                        });
+                    }
+                });
             }
-        }
+        };
+
+        autoCompleteTabela = function () {
+            if ($('#tabnome').val().length > 3) {
+                src = "{{ route('autoCompleteTabela') }}";
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    type: "get",
+                    data: {
+                        tabnome: $('#tabnome').val()
+                    },
+                    success: function (data) {
+                        $("#tabnome").autocomplete({
+                            source: data
+                        });
+                    }
+                });
+            }
+        };
 
         cadastrarTabela = function () {
             src = "{{ route('addTabela') }}";
@@ -430,9 +440,9 @@
         buscaTabelas = function (funcionalidade, tabela) {
             $('#tabnome_' + funcionalidade + '_' + tabela + '').html('<option value="">Buscando...</option>');
             var val = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').val();
-            if(val == 0) {
+            if (val == 0) {
                 alert('Selecione um Owner');
-            }else{
+            } else {
                 var owner = $('#tabowner_' + funcionalidade + '_' + tabela + ' :selected').text();
                 src = "{{ route('atualizaTabelas') }}";
                 $.ajax({
@@ -468,42 +478,62 @@
                 },
                 success: function (data) {
                     if (data) {
-                        var r = confirm("Demanda já existe, deseja carregar os dados?");
-                        if (r == true) {
+                        alert('Demanda já existe');
 
-                            //busca a demanda e redireciona para a tela dela.
-                            
-
-                        } else {
+                        // var r = confirm("Demanda já existe, deseja editar?");
+                        // if (r == true) {
+                        //
+                        //     //busca a demanda e redireciona para a tela dela.
+                        //
+                        // } else {
                             $('#demnumero').val('');
                             $('#demnumero').focus();
-                        }
+                        // }
                     }
                 }
             });
         }
 
-        verificaFuncionalidade = function (funnome) {
+        verificaFuncionalidade = function (funnome, idfunc) {
             src = "{{ route('verificaFuncionalidade') }}";
             $.ajax({
                 url: src,
                 dataType: "json",
                 type: "get",
                 data: {
-                    funnome: funnome.value
+                    funnome: funnome.value, sisid: $("#sisid").val()
                 },
-                success: function (data) {
-                    if (data) {
-                        var r = confirm("Funcionalidade já existe, deseja carregar os dados do ultimo documento?");
-                        if (r == true) {
-
-
-                            // carregar tabelas
-
-                        } else {
-                            $('#demnumero').val('');
-                            $('#demnumero').focus();
-                        }
+                success: function (dados) {
+                    var r = confirm("Funcionalidade já existe, deseja carregar os dados?");
+                    if (r == true) {
+                        $.each(dados, function (i, obj) {
+                            var nrTabela = $('#qtdtabelas_' + idfunc).val();
+                            var newRow = $("<tr>");
+                            var cols = "";
+                            cols += '<td><center>';
+                            cols += '<button type="button" onclick="removeRow(this)" style="margin-top: 5px; float: outside" class="btn btn-danger btn-sm">X</button>';
+                            cols += '</center></td>';
+                            cols += '<td><input type="text" name="tabowner" id="tabowner" value="' + obj.tabowner + '" disabled></td>';
+                            cols += '<td><input type="text" name="tabnome" id="tabnome" value="' + obj.tabnome + '" disabled></td>';
+                            cols += '<td><input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="S"  disabled ';
+                            if (obj.tafutilizada == 'S') {
+                                cols += ' checked="checked" ';
+                            }
+                            cols += ' >Sim &nbsp;&nbsp; ';
+                            cols += '<input type="radio" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="N" disabled';
+                            if (obj.tafutilizada == 'N') {
+                                cols += ' checked="checked" ';
+                            }
+                            cols += '>Não</td>';
+                            cols += '<td><input type="text" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]" value="' + obj.taftipoacesso + '"  disabled >';
+                            cols += '<input type="hidden" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tabid]" value="' + obj.tabid + '">';
+                            cols += '<input type="hidden" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][tafutilizada]" value="' + obj.tafutilizada + '">';
+                            cols += '<input type="hidden" name="funcionalidade[' + idfunc + '][tabela][' + nrTabela + '][taftipoacesso]" value="' + obj.taftipoacesso + '"></td>';
+                            newRow.append(cols);
+                            $("#tabela_funcionalidades_" + idfunc).append(newRow);
+                            nrTabela++;
+                            $('#qtdtabelas_' + idfunc).val(nrTabela);
+                        })
                     }
                 }
             });
