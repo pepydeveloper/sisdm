@@ -82,7 +82,7 @@
         {{ csrf_field() }}
         <div class="panel panel-success">
             <div class="panel-heading links"><a href="cadastrar">
-                    <span class="btn btn-primary glyphicon glyphicon-paste"
+                    <span class="btn btn-success glyphicon glyphicon-paste"
                           aria-hidden="true"> Nova Demanda</span></a>
             </div>
             <table class="table table-striped">
@@ -91,7 +91,7 @@
                     @if(count($demandas))
                         <th>
                             <button type="submit" class="btn btn-danger" name="todos">Limpar</button>
-                            <button type="submit" class="btn btn-success">Filtrar</button>
+                            <button type="submit" class="btn btn-info">Filtrar</button>
                         </th>
                         <th>
                             <input type="text" name="demnumero" class="form-control" placeholder="Nº Demanda"
@@ -108,14 +108,16 @@
                     <tr>
                         <td>
                             <a class="btn btn-success glyphicon glyphicon-download-alt"
-                               href="javascript:exportarXls({{$demanda->demnumero}});" target="_blank"></a>
-                            <a class="btn btn-warning glyphicon glyphicon-eye-open"
-                               href="editar/{{$demanda->demid}}"></a>
+                               href="javascript:exportarXls({{$demanda->demnumero}});" target="_blank" title="Download"></a>
+                            <a class="btn btn-warning glyphicon glyphicon-pencil"
+                               href="editar/{{$demanda->demid}}" title="Editar"></a>
+                            <a class="btn btn-primary glyphicon glyphicon-link"
+                               href="http://sape-sistemas.ebserh.gov.br/sistemas/issues/{{$demanda->demnumero}}" title="Abrir Sape" target="_blank"></a>
                             {{--<a class="btn btn-danger glyphicon glyphicon-remove-sign" href="excluir/{{$demanda->demid}}"></a>--}}
                         </td>
                         <td>{{$demanda->demnumero}}</td>
                         <td>{{$demanda->demdescricao}}</td>
-                        <td>{{$demanda->sisnome}}</td>
+                        <td>{{$demanda->sistema->sisnome}}</td>
                         <td>{{$demanda->demtipo}}</td>
                     </tr>
                 @endforeach
@@ -127,6 +129,7 @@
                 </tfoot>
             </table>
         </div>
+        <div class="panel-heading links" align="right">{{$demandas->links()}}</div>
     </form>
 </div>
 

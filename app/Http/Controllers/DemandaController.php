@@ -15,22 +15,17 @@ use Illuminate\Http\Request;
 
 class DemandaController extends Controller
 {
+    private $totalPage = 10;
+
     public function index(){
-
-
         if(isset($_REQUEST['demnumero'])&& !isset($_REQUEST['todos'])){
-            $listDemandas = Demanda::all()
-                ->where('demnumero','=', $_REQUEST['demnumero']);
+            $listDemandas = Demanda::where('demnumero','=', $_REQUEST['demnumero'])
+                ->paginate($this->totalPage);
         }else{
-            $listDemandas = DB::table('demanda')
-                ->join('sistema', 'demanda.sisid', '=', 'sistema.sisid')
-                ->orderBy('sisnome')
-                ->orderBy('demnumero')
-                ->get();
+            $listDemandas = Demanda::paginate($this->totalPage);
         }
-        $sistemas = Sistema::all();
 
-        return view('demanda.index', ['demandas' => $listDemandas,'sistemas' => $sistemas]);
+        return view('demanda.index', ['demandas' => $listDemandas]);
 
     }
 
